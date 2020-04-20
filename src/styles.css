@@ -1,1 +1,42 @@
 /* You can add global styles to this file, and also import other style files */
+/* latin-ext */
+@import 'fonts.css';
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Open Sans", Arial, Helvetica, sans-serif;
+  --themeBlue: #1db5a3;
+  --themeBrown: #4F000B;
+  --offWhite: #f3f3f3;
+}
+*:focus {
+  outline: none !important;
+}
+h1 {
+  font-family: Raleway, "Open Sans", Arial, Helvetica, sans-serif;
+}
+.blue-button {
+  background-color: var(--themeBlue);
+  width: auto;
+  height: auto;
+  color: white;
+  border-radius: 4px;
+  border: 0px;
+}
+.brown-button {
+  background-color: var(--themeBrown);
+  color: white;
+  width: auto;
+  height: auto;
+  border-radius: 4px;
+  border: 0px;
+}
+.blue-button:hover, .brown-button:hover {
+  cursor: pointer;
+  color: var(--offWhite);
+}
+main {
+  position: relative;
+  top: 40px;
+  z-index: 1;
+}

@@ -1,0 +1,10 @@
+<nav>
+  <img routerLink="" class="logo" src="../../assets/images/logo.png">
+  <h1 routerLink="" class="navbar-title">Sendable</h1>
+  <img *ngIf="isLoggedIn()" src="{{ getData().photoURL }}" class="profile-pic">
+  <button *ngIf="!isLoggedIn(); else loggedOut" (click)="signIn()" class="blue-button login">Log In</button>
+  <ng-template #loggedOut>
+    <button #loggedOut (click)="signOut()" class="blue-button login">Sign Out</button>
+  </ng-template>
+  <h1 routerLink="/about" class="navbar-title" id="about">About</h1>
+</nav>

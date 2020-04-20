@@ -1,0 +1,8 @@
+<main>
+  <div class="dashboard-container">
+    <app-email-upload *ngIf="!isEmailUploaded(); else subListView"></app-email-upload>
+    <ng-template #subListView>
+      <app-subscription-list></app-subscription-list>
+    </ng-template>
+  </div>
+</main>
