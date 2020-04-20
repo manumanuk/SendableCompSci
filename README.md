@@ -1,5 +1,10 @@
-# SendableCompSci
+# SendableCompSci - ICS4U0
 
+## Files
+Code associated with the ICS 4U0 Files assignment can be found in the file ./src/app/services/subscription-list.service.ts/
+
+
+# Angular
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.0.7.
 
 ## Development server
