@@ -42,7 +42,14 @@ export class LoginService {
    * @returns { Promise } - Promise is resolved when user logs in
    */
   login() {
-    return this._firebaseAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then((res) => this._router.navigate(["/dashboard"]));
+    return this._firebaseAuth.signInWithPopup(
+        new firebase.auth.GoogleAuthProvider().addScope(
+          'https://www.googleapis.com/auth/drive.file, https://www.googleapis.com/auth/drive.readonly')
+      ).then(async (res) => {
+        this._router.navigate(["/dashboard"]);
+        //localStorage.setItem('refreshToken', await res.credential.toJSON().toString());
+      });
+
   }
 
   /**

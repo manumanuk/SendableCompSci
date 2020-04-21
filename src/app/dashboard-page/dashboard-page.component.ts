@@ -16,8 +16,10 @@ export class DashboardPageComponent implements OnInit {
   /**
    * Creates Subscription List and PIPEDA List class instances
    * @constructor
+   * @param { SubscriptionListService } _subscriptionList - Creates object to hold list of companies associated with user email
+   * @param { PIPEDAListService } _PIPEDAList - Creates object to hold list of companies for PIPEDA
    */
-  constructor(private _subscriptionList : SubscriptionListService, private _PIPEDAList: PIPEDAListService) {}
+  constructor(private _subscriptionList: SubscriptionListService, private _PIPEDAList: PIPEDAListService) {}
 
   /**
    * Loads any scripts needed for Dashboard Page
@@ -26,11 +28,9 @@ export class DashboardPageComponent implements OnInit {
 
   /**
    * Assigns upload source link to subscription list and initiates scan
-   * @param { String } sourceURL - Upload source (will involve Google Drive API, is a link for now)
    */
-  uploadData(sourceURL: String) {
-    this._subscriptionList.setUploadSrc(sourceURL);
-    this.scanEmail();
+  uploadData() {
+    this._subscriptionList.setUploadSrc();
   }
 
   /**
@@ -74,7 +74,7 @@ export class DashboardPageComponent implements OnInit {
   /**
    * Initiates scan for subscriptions
    */
-  private scanEmail() {
+  scanEmail() {
     this._subscriptionList.scanEmail();
   }
 }

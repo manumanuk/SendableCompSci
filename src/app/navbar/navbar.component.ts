@@ -28,7 +28,7 @@ export class NavbarComponent implements OnInit {
    * Calls sign in method from backend LoginService object
    */
   signIn() {
-    console.log(this._loginService.login());
+    this._loginService.login();
   }
 
   /**

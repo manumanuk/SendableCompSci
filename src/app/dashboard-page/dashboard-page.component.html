@@ -1,6 +1,14 @@
 <main>
   <div class="dashboard-container">
-    <app-email-upload *ngIf="!isEmailUploaded(); else subListView"></app-email-upload>
+    <div *ngIf="isEmailUploaded(); else subListView">
+      <div style="height:10px;"></div>
+      <button style="margin: 0 auto; display: block; padding: 20px; font-size: 20px; box-sizing: border-box;"class="brown-button" (click)="uploadData()">Get my files</button>
+      <div style="height:10px;"></div>
+      <button style="margin: 0 auto; display: block; padding: 20px; font-size: 20px; box-sizing: border-box;"
+              class="brown-button" (click)="scanEmail()">Scan my Files</button>
+
+    </div>
+    <!--<app-email-upload *ngIf="isEmailUploaded(); else subListView"></app-email-upload>-->
     <ng-template #subListView>
       <app-subscription-list></app-subscription-list>
     </ng-template>

@@ -38,3 +38,21 @@
   font-size: 25px;
   font-weight: 200;
 }
+.learn-more {
+  width: 150px;
+  height: 50px;
+  font-size: 17px;
+  font-weight: 500;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px auto;
+  display: block;
+}
+.sign-in-button {
+  width: 250px;
+  margin: 0 auto;
+  display: block;
+}
+.sign-in-button:hover {
+  cursor: pointer;
+}

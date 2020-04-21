@@ -1,22 +1,29 @@
 import { Injectable } from '@angular/core';
 import { SubscriptionService } from './subscription.service';
+import { HttpClient } from '@angular/common/http';
+import { SubscriptionData } from './subscription-data-interface'
+import { PIPEDAListService } from './pipedalist.service';
+import { stringify } from 'querystring';
 
 @Injectable({
   providedIn: "root",
 })
+
 /**
  * Generates and handles list of subscriptions found in emails
  * @class
  */
 export class SubscriptionListService {
-  private dataSrc: String = null; // Google Drive API will provide a way to access email zip file, for now treated as a url
-  private subscriptions = []; //Array of Subscription Objects
+  private dataSrc: string = null; // Google Drive API will provide a way to access email zip file, for now treated as a url
+  private subscriptions:Object = { }; //Array of Subscription Objects
+  private emailData: string = null;
 
   /**
    * Creates Subscripton List class
    * @constructor
+   * @param { HttpClient } _http - HttpClient Object to handle HTTP requests
    */
-  constructor() {}
+  constructor(private _http: HttpClient) {}
 
   /**
    * Checks if data resource has been uploaded
@@ -34,17 +41,37 @@ export class SubscriptionListService {
 
   /**
    * Sets the source for where to retrieve email data from: will be dependent upon Google Drive API, is a string for now
-   * @param { String } sourceURL - source URL from which email data must be retrieved
    */
-  setUploadSrc(sourceURL) {
-    this.dataSrc = sourceURL;
+  setUploadSrc() {
+    //let token = localStorage.getItem('token');
+    //const drive = google.drive({version: 'v3', token});
+    // Get email data: FILE READ
+    this.dataSrc = "assets/sampleEmailData.txt";
+    this._http.get(this.dataSrc, { responseType: "text" }).subscribe(
+        (data) => {
+          this.emailData = data;
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
   }
 
   /**
    * Scans emails found at source URL and adds subscriptions to subscription list
    */
   scanEmail () {
-    // Will add Subscription objects to the subscription list
+    //Analyze emails: STRING MANIPULATION
+    let emails: Array<string> = this.emailData.split("Email");
+    for (let email of emails) {
+      let emailLines: Array<string> = email.split("\n");
+      if (email.search("subscribe") !== -1) {
+        let sender:string = emailLines[2].slice("Sender: ".length - 1, -1);
+        if (Object.keys(this.subscriptions).find(input => {return input==sender;}) == undefined) {
+          this.subscriptions[sender] = new SubscriptionService(sender);
+        }
+      }
+    }
   }
 
   /**
@@ -64,3 +91,22 @@ export class SubscriptionListService {
   }
 
 }
+
+/**
+ * DATATYPE LIMITS:
+ * #Primitive Datatypes
+ * Number: Holds integers and floating point numbers (decimals) of max size 8 bytes (64 bits)
+ *                                                   from -(2 x 10^53 - 1) to (2 x 10^53 - 1)
+ * BigInt: Holds ONLY integer values, has no predefined limit on size
+ * String: Immutable set of characters with no set max size, but each character is 2 bytes (16 bit element)
+ * Symbol: Anonymous, unique value that allows for variables to be absolutely unique. Essentially, an exclusively unique identifier.
+ *                                                  No officially documented size in memory for a Symbol.
+ * Boolean: Holds true or false, no official documentation information on memory usage, but stack overflow says 4 bytes
+ * Undefined: Non-writable type, can only have the value "undefined"
+ *
+ * #Data Structures and other types
+ * Object: No predefined size of datatype. Holds keys and values.
+ * Array (is of type Object): List of data. Element datatypes do not have to match. Size is dynamic.
+ * Null: Holds "nothing": not 0, not "", nothing.
+ * Any: Special Typescript datatype that serves as a placeholder when compiler can't auto-detect a type.
+ */
