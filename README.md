@@ -1,7 +1,7 @@
 # SendableCompSci - ICS4U0
 
 ## Files
-Code associated with the ICS 4U0 Files assignment can be found in the file ./src/app/services/subscription-list.service.ts/
+Code associated with the ICS 4U0 Files assignment can be found in the files [subscription-list.service.ts](./src/app/services/subscription-list.service.ts/) ([text file](./src/assets/sampleEmailData.txt) IO + datatype limitations), and [subscription.service.ts](./src/app/services/subscription.service.ts/) (database input and output).
 
 
 # Angular
