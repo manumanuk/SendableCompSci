@@ -67,6 +67,10 @@ export class SubscriptionListService {
       let emailLines: Array<string> = email.split("\n");
       if (email.search("subscribe") !== -1) {
         let sender:string = emailLines[2].slice("Sender: ".length - 1, -1);
+        //CONVERTING STRING TO NUMBER
+        let date:number = parseInt(emailLines[1].slice("Date: ".length -1, -1));
+        // Date to be used later
+        console.log(date);
         if (Object.keys(this.subscriptions).find(input => {return input==sender;}) == undefined) {
           this.subscriptions[sender] = new SubscriptionService(sender);
         }
