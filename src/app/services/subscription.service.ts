@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SubscriptionData } from './subscription-data-interface'
 import { AngularFireDatabase, AngularFireList } from '@angular/fire/database'
+import { Observable } from 'rxjs'
 
 @Injectable({
   providedIn: 'root'
@@ -10,19 +11,18 @@ import { AngularFireDatabase, AngularFireList } from '@angular/fire/database'
  * @class
  */
 export class SubscriptionService {
-  private subscriptionData: SubscriptionData;
+  //private databaseReader:Observable<SubscriptionData[]>;
+  private subData: SubscriptionData[];
+  private subscriptionData = new SubscriptionData;
   private databasePath = "/companies";
-  databaseRef: AngularFireList<SubscriptionData> = null;
+  private databaseRef: AngularFireList<SubscriptionData>;
 
   /**
    * Creates SubscriptionService class
    * @constructor
-   * @param { String } _name - Name of company to search for
    * @param { AngularFireDatabase } [_database] - Creates private object of type AngularFireDatabase
    */
-  constructor(_name:String, private _database?: AngularFireDatabase) {
-    this.subscriptionData.name = _name;
-    this.searchForCompany(_name);
+  constructor(private _database: AngularFireDatabase) {
     this.databaseRef = _database.list(this.databasePath);
   }
 
@@ -30,13 +30,15 @@ export class SubscriptionService {
    * Crawls web and database to find company's privacy policy and privacy email
    * @param service - Name of company to search for
    */
-  searchForCompany(service: String) {
+  readDatabase(service: String) {
     //Check first to see if company name is already in the database
     //DATABASE FILE READING
-    if (Object(this.databaseRef).keys().find(companyName => {return companyName == service })) {
-      return
+    for (let key of this.subData) {
+      if (key.name == service) {
+        this.subscriptionData=key;
+        return;
+      }
     }
-
     //Call function that crawls web for company's privacy policy
     /** Code to be added later */
     this.subscriptionData.name = service;
@@ -56,5 +58,26 @@ export class SubscriptionService {
    */
   getData(): SubscriptionData {
     return this.subscriptionData;
+  }
+
+  /**
+   * Clears information associated with subscription
+   */
+  clearData(): void {
+    this.subscriptionData = new SubscriptionData;
+  }
+
+  /**
+   * Reads values in database and calls the read database function
+   * @param service - Name of company to search for
+   */
+  searchForCompany (service: String) {
+    //let promise = await
+    return this.databaseRef.valueChanges().subscribe(data=> {
+      this.subData = data;
+      this.readDatabase(service)
+    })
+    //let result = await promise;
+    //this.subData = result;
   }
 }

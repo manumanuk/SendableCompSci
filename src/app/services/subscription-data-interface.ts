@@ -1,8 +1,8 @@
 /**
  * Contains all information about a given subscription
- * @interface [SubscriptionData]
+ * @class [SubscriptionData]
  */
-export interface SubscriptionData {
+export class SubscriptionData {
   name: String;
   emailFrequency: Number;
   pipAddress: String;
