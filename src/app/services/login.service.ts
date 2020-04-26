@@ -28,7 +28,7 @@ export class LoginService {
   constructor(private _firebaseAuth: AngularFireAuth, private _router: Router) {
     this.user = _firebaseAuth.authState;
 
-    this.user.subscribe((user) => {
+    this.user.subscribe(user => {
       if (user) {
         this.userDetails = user;
       } else {
@@ -47,7 +47,7 @@ export class LoginService {
           'https://www.googleapis.com/auth/drive.file, https://www.googleapis.com/auth/drive.readonly')
       ).then(async (res) => {
         this._router.navigate(["/dashboard"]);
-        //localStorage.setItem('refreshToken', await res.credential.toJSON().toString());
+        localStorage.setItem('refreshToken', await res.credential.toJSON().toString());
       });
 
   }

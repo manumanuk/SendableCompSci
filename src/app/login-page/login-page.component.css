@@ -48,6 +48,16 @@
   margin: 10px auto;
   display: block;
 }
+.dashboard-button {
+  width: 180px;
+  height: 60px;
+  font-size: 17px;
+  font-weight: 500;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px auto;
+  display: block;
+}
 .sign-in-button {
   width: 250px;
   margin: 0 auto;

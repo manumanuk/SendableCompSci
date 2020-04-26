@@ -68,9 +68,9 @@ export class SubscriptionListService {
       if (email.search("subscribe") !== -1) {
         let sender:string = emailLines[2].slice("Sender: ".length - 1, -1);
         //CONVERTING STRING TO NUMBER
-        //let date:number = parseInt(emailLines[1].slice("Date: ".length -1, -1));
+        let date:number = parseInt(emailLines[1].slice("Date: ".length -1, -1));
         // Date to be used later
-        //console.log(date);
+        console.log(date);
         if (Object.keys(this.subscriptions).find(input => {return input==sender;}) == undefined) {
           this._newSub.searchForCompany(sender);
           this.subscriptions[sender] = this._newSub;

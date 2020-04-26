@@ -1,7 +1,7 @@
 <main>
   <div class="welcome">
     <div class="title-container">
-
+      <div></div>
       <div class="logo">
         <img routerLink="" class="logo-image" src="../../assets/images/logo.png">
         <h1 routerLink="" class="title">Sendable</h1>
@@ -11,6 +11,11 @@
 
     </div>
   </div>
-  <button class="blue-button learn-more" routerLink="/about">Learn More</button>
-  <img (click)="signIn()" class="sign-in-button" src="../../assets/images/googleSignIn.png">
+  <div>
+    <button class="blue-button learn-more" routerLink="/about">Learn More</button>
+    <img *ngIf="!getLoginStatus(); else goToDashboard" (click)="signIn()" class="sign-in-button" src="../../assets/images/googleSignIn.png">
+  </div>
+  <ng-template #goToDashboard>
+    <button class="brown-button dashboard-button" routerLink="/dashboard">Go to Dashboard</button>
+  </ng-template>
 </main>

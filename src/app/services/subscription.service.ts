@@ -12,7 +12,7 @@ import { Observable } from 'rxjs'
  */
 export class SubscriptionService {
   //private databaseReader:Observable<SubscriptionData[]>;
-  private subData: SubscriptionData[];
+  private dbRead: SubscriptionData[];
   private subscriptionData = new SubscriptionData;
   private databasePath = "/companies";
   private databaseRef: AngularFireList<SubscriptionData>;
@@ -33,7 +33,7 @@ export class SubscriptionService {
   readDatabase(service: String) {
     //Check first to see if company name is already in the database
     //DATABASE FILE READING
-    for (let key of this.subData) {
+    for (let key of this.dbRead) {
       if (key.name == service) {
         this.subscriptionData=key;
         return;
@@ -74,7 +74,7 @@ export class SubscriptionService {
   searchForCompany (service: String) {
     //let promise = await
     return this.databaseRef.valueChanges().subscribe(data=> {
-      this.subData = data;
+      this.dbRead = data;
       this.readDatabase(service)
     })
     //let result = await promise;

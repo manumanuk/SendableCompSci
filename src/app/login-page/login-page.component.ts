@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../services/login.service';
+import { Router } from '@angular/router'
 
 @Component({
   selector: "app-login-page",
@@ -16,11 +17,12 @@ export class LoginPageComponent implements OnInit {
    * Creates LoginPageComponent class and loads backend for login
    * @constructor
    * @param { LoginService } _loginService - Connects page view to backend tools for handling login events
+   * @param { Router } _router - Object imported from Angular Router library, responsible for pageview navigation
    */
-  constructor(private _loginService: LoginService) {}
+  constructor(private _loginService: LoginService, private _router: Router) {}
 
   /**
-   * Loads any scripts needed for Login Page
+   * When login page is loaded, checks if user has already logged in
    */
   ngOnInit(): void {}
 
@@ -29,5 +31,12 @@ export class LoginPageComponent implements OnInit {
   */
   signIn() {
     this._loginService.login();
+  }
+
+  /**
+   * Retrieves login status
+   */
+  getLoginStatus() {
+    return this._loginService.isLoggedIn();
   }
 }
