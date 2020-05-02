@@ -67,6 +67,10 @@ export class SubscriptionListService {
     });
   }
 
+  /**
+   * Locates the fileId of emails
+   * @param { CredentialData } - token: Access token to invoke Drive API
+   */
   searchForTestFile(token:CredentialData) {
     gapi.auth.setToken({access_token: token.credential.accessToken});
     console.log(this.googleAuth.isSignedIn);
@@ -85,20 +89,6 @@ export class SubscriptionListService {
   }
 
   /**
-   * Checks if data resource has been uploaded
-   */
-  isDataUploaded() {
-    let status: Boolean;
-    //Call external function to check whether an upload has occured
-    if (this.dataSrc == "null") {
-      status = false;
-    } else {
-      status = true;
-    }
-    return status;
-  }
-
-  /**
    * Sets fileId for email data, begins file scan by calling scanEmail();
    * @param { string } - fileId: Google Drive API file ID to retrieve email data from
    */
@@ -114,20 +104,21 @@ export class SubscriptionListService {
     }, err => {
       console.error("An error occurred fetching the email data file: " + err)
     });
-    //.execute(resp=>{});
-    //responseType="text"
-    /*const tokenHeader = new HttpHeaders().set("Authorization", "Bearer " + gapi.auth.getToken().access_token).set("Accept", "application/json");
-    this._http.get("https://www.googleapis.com/drive/v2/files/" + this.dataSrc + "?key=" + "AIzaSyD8YHcpEJKBFnrTt4DXftDVdsOw9XGYLrg/alt=media", {  headers: tokenHeader }).subscribe(
-      (data) => {
-        //this.emailData = data;
-        //console.log(this.emailData.slice(0,1000));
-        console.log(data);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );*/
+  }
 
+
+  /**
+ * Checks if data resource has been uploaded
+ */
+  isDataUploaded() {
+    let status: Boolean;
+    //Call external function to check whether an upload has occured
+    if (this.dataSrc == "null") {
+      status = false;
+    } else {
+      status = true;
+    }
+    return status;
   }
 
   /**
@@ -145,17 +136,7 @@ export class SubscriptionListService {
           index + email.slice(index, index + 1000).search("\n")
         )
         .trim();
-      /*if (serviceName.search(">") == -1) {
-        serviceName = email.slice(index + (email.slice(index, index + 1000)).search('\n'), email.slice((email.slice(index, index + 5000)).search('\n'), 1000).search('\n'));
-      }
-      let mySlice = email.slice(email.slice(index, index+1000).search("\n"), -1);
-      let iteration = 0;
-      while (serviceName.search(">") == -1 && iteration < 10) {
-        mySlice = email.slice(email.slice(index, index + 1000).search("\n"), -1);
-        index = mySlice.search("From: ");
-        serviceName = email.slice(index + "From: ".length, index + (email.slice(index, index + 1000)).search('\n')).trim();
-        iteration++;
-      }*/
+
       if (serviceName.search(">") != -1) {
         let address: String = "";
         let myArray = [];
@@ -173,15 +154,6 @@ export class SubscriptionListService {
         address = myArray.join("");
         let name = address.slice(0, address.search(/\./));
 
-        /*if (name.startsWith("email")) {
-          name = name.slice("email".length - 1, -1);
-        } else if (name.endsWith("email")) {
-          name = name.slice(0, name.search("email"));
-        } else if (name.startsWith("mail")) {
-          name = name.slice("mail".length - 1, -1);
-        } else if (name.endsWith("mail") && name!="knowmail") {
-          name = name.slice(0, name.search("mail"));
-        }*/
         if (
           this.subscriptions == {} ||
           (Object.keys(this.subscriptions).indexOf(name) == -1 &&
