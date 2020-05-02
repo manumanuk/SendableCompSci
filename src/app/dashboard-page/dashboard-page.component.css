@@ -1,0 +1,13 @@
+.instructions {
+  padding: 20px;
+  font-style: italic;
+  text-align: center;
+  font-size: small;
+}
+.dash-button {
+  margin: 0 auto;
+  display: block;
+  padding: 20px;
+  font-size: 20px;
+  box-sizing: border-box;
+}

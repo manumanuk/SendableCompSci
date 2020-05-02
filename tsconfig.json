@@ -1,6 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "types": ["gapi", "gapi.auth2", "gapi.client", "gapi.client.drive"],
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,

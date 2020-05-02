@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SubscriptionListService } from '../services/subscription-list.service';
 import { PIPEDAListService } from '../services/pipedalist.service';
+import { LoginService } from '../services/login.service';
 
 @Component({
   selector: "app-dashboard-page",
@@ -18,19 +19,22 @@ export class DashboardPageComponent implements OnInit {
    * @constructor
    * @param { SubscriptionListService } _subscriptionList - Creates object to hold list of companies associated with user email
    * @param { PIPEDAListService } _PIPEDAList - Creates object to hold list of companies for PIPEDA
+   * @param { LoginService } _login - Handles authorization events
    */
-  constructor(private _subscriptionList: SubscriptionListService, private _PIPEDAList: PIPEDAListService) {}
+  constructor(private _subscriptionList: SubscriptionListService, private _PIPEDAList: PIPEDAListService, private _login: LoginService) {}
 
   /**
    * Loads any scripts needed for Dashboard Page
    */
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this._subscriptionList.initClient();
+  }
 
   /**
    * Assigns upload source link to subscription list and initiates scan
    */
   uploadData() {
-    this._subscriptionList.setUploadSrc();
+    this._subscriptionList.searchForTestFile(this._login.getCredentials());
   }
 
   /**

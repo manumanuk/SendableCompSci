@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Router } from "@angular/router";
-
-//Import Firebase authentication tools
 import { AngularFireAuth } from "@angular/fire/auth";
 import * as firebase from "firebase/app";
-//Import Observable to listen in on changes to login status
 import { Observable } from "rxjs";
+import { CredentialData } from './prototypes/credential-prototype'
 
+const SCOPES: Array<string> = ["https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive.readonly"]
 
 @Injectable({
   providedIn: "root",
 })
+
+
 /**
  * Handles user login events and data using Firebase tools
  * @class
@@ -18,6 +19,7 @@ import { Observable } from "rxjs";
 export class LoginService {
   private user: Observable<firebase.User>;
   private userDetails: firebase.User = null;
+  private credentialData: CredentialData = null;
 
   /**
    * Creates Observable to listen to user login status and assigns user information to userDetails
@@ -27,10 +29,12 @@ export class LoginService {
    */
   constructor(private _firebaseAuth: AngularFireAuth, private _router: Router) {
     this.user = _firebaseAuth.authState;
+    this.credentialData = new CredentialData;
 
     this.user.subscribe(user => {
       if (user) {
         this.userDetails = user;
+        this.credentialData.user=this.userDetails;
       } else {
         this.userDetails = null;
       }
@@ -43,12 +47,21 @@ export class LoginService {
    */
   login() {
     return this._firebaseAuth.signInWithPopup(
-        new firebase.auth.GoogleAuthProvider().addScope(
-          'https://www.googleapis.com/auth/drive.file, https://www.googleapis.com/auth/drive.readonly')
+        new firebase.auth.GoogleAuthProvider().addScope(SCOPES.join(', '))
       ).then(async (res) => {
+        this.credentialData.credential=res.credential;
+        this.credentialData.scopes = SCOPES;
+        this.credentialData.additionalUserInfo = res.additionalUserInfo;
+        this.credentialData.operationType = res.operationType;
+        this.credentialData.signInMethod = res.credential.signInMethod;
+        this.credentialData.providerId = res.credential.providerId;
+        this.credentialData.refreshToken = res.user.refreshToken;
+        this.credentialData.tokenType = "Bearer";
         this._router.navigate(["/dashboard"]);
-        localStorage.setItem('refreshToken', await res.credential.toJSON().toString());
-      });
+      }, (err) => {
+        console.error("A login error has occured: " + err);
+      }
+      );
 
   }
 
@@ -77,11 +90,32 @@ export class LoginService {
    * @returns { Object } myData - Returns user's name, email, and profile picture
    */
   getUserData() {
-    let myData = {
-      name: this.userDetails.displayName.toString(),
-      email: this.userDetails.email,
-      photoURL: this.userDetails.photoURL.toString(),
-    };
-    return myData;
+    return this.userDetails;
+  }
+
+  /**
+   * Retrieves important credential data, like access token and refresh token
+   * @returns { CredentialData } - credentialData: Credential data associated with Firebase login
+   */
+  getCredentials() {
+    this.refreshCredentials().then((res) => {
+      this.credentialData.credential = res.credential;
+    });
+    return this.credentialData;
+  }
+
+  /**
+   * Refresh the Firebase login access token
+   * @returns { Promise<firebase.auth.UserCredential> } -  Provides a Promise containing access token
+   */
+  refreshCredentials(): Promise<firebase.auth.UserCredential> {
+    /*if (this.credentialData.credential==null){
+      return this.userDetails.reauthenticateWithPopup(new firebase.auth.GoogleAuthProvider().addScope(SCOPES.join(', ')));
+    } else {
+      console.log("here");
+      return this.userDetails.reauthenticateWithCredential(this.credentialData.credential);
+    }
+  }*/
+    return this.userDetails.reauthenticateWithCredential(this.credentialData.credential);
   }
 }

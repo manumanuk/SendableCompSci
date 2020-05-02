@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { SubscriptionData } from './subscription-data-interface'
+import { SubscriptionData } from './prototypes/subscription-data-interface'
 import { AngularFireDatabase, AngularFireList } from '@angular/fire/database'
-import { Observable } from 'rxjs'
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +19,7 @@ export class SubscriptionService {
   /**
    * Creates SubscriptionService class
    * @constructor
-   * @param { AngularFireDatabase } [_database] - Creates private object of type AngularFireDatabase
+   * @param { AngularFireDatabase } _database - Creates private object of type AngularFireDatabase
    */
   constructor(private _database: AngularFireDatabase) {
     this.databaseRef = _database.list(this.databasePath);
@@ -49,7 +48,7 @@ export class SubscriptionService {
 
     //DATABASE FILE WRITING
     //Add information to database of available companies
-    this.databaseRef.push(this.subscriptionData)
+    //this.databaseRef.push(this.subscriptionData)
   }
 
   /**
@@ -64,6 +63,7 @@ export class SubscriptionService {
    * Clears information associated with subscription
    */
   clearData(): void {
+    this.subscriptionData = null;
     this.subscriptionData = new SubscriptionData;
   }
 
@@ -72,12 +72,9 @@ export class SubscriptionService {
    * @param service - Name of company to search for
    */
   searchForCompany (service: String) {
-    //let promise = await
-    return this.databaseRef.valueChanges().subscribe(data=> {
+    this.databaseRef.valueChanges().subscribe(data=> {
       this.dbRead = data;
-      this.readDatabase(service)
+      this.readDatabase(service);
     })
-    //let result = await promise;
-    //this.subData = result;
   }
 }
