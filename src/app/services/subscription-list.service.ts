@@ -3,7 +3,6 @@ import { SubscriptionService } from './subscription.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CredentialData } from './prototypes/credential-prototype'
 import { LoginService } from './login.service';
-import { Observable } from 'rxjs'
 import { PIPEDAListService } from './pipedalist.service';
 import { SubscriptionData } from './prototypes/subscription-data-interface'
 import { bubbleSort, selectionSort, linearSearch, binarySearch } from './prototypes/sorting-searching-algorithms'
@@ -60,15 +59,16 @@ export class SubscriptionListService {
     console.log("Here is what linearSearch returned: " + linearIndex);
     */
 
-
     /*
     let realSorted = emailWords.sort();
-    //console.log("Here is the real sort: " + realSorted);
+    console.log("Here is the real sort: ");
+    console.log(realSorted);
     */
 
     /*
     let selectionSorted = selectionSort(emailWords);
-    console.log("Here is selection sort: " + selectionSorted)
+    console.log("Here is selection sort: ");
+    console.log(selectionSorted);
     if (selectionSorted == realSorted) {
       console.log("Selection sorted and real sorted arrays are identical.");
     }
@@ -76,16 +76,17 @@ export class SubscriptionListService {
 
     /*
     let bubbleSorted = bubbleSort(emailWords);
-    console.log("Here is bubble sort: " + bubbleSorted);
+    console.log("Here is bubble sort: ");
+    console.log(bubbleSorted);
     if (bubbleSorted == realSorted) {
       console.log("Bubble sorted and real sorted arrays are identical.");
-    }*/
-
+    }
+    */
 
     /*
-    let binaryIndex = binarySearch(realSorted, "From:");
+    let binaryIndex = binarySearch(bubbleSorted, "From:");
     console.log("Here is what binarySearch returned: " + binaryIndex);
-    console.log("Binary search result: " + realSorted[binaryIndex]);
+    console.log("Binary search result: " + bubbleSorted[binaryIndex]);
     */
 
   }
