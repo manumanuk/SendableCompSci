@@ -3,8 +3,10 @@ import { SubscriptionService } from './subscription.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CredentialData } from './prototypes/credential-prototype'
 import { LoginService } from './login.service';
+import { Observable } from 'rxjs'
 import { PIPEDAListService } from './pipedalist.service';
 import { SubscriptionData } from './prototypes/subscription-data-interface'
+import { bubbleSort, selectionSort, linearSearch, binarySearch } from './prototypes/sorting-searching-algorithms'
 
 
 @Injectable({
@@ -17,7 +19,7 @@ import { SubscriptionData } from './prototypes/subscription-data-interface'
  */
 export class SubscriptionListService {
   private dataSrc: string = null; // Google Drive API will provide a way to access email zip file, for now treated as a url
-  private subscriptions: Object = {}; //Array of Subscription Objects
+  private subscriptions:Object = { }; //Array of SubscriptionData Objects attached to names
   private emailData: string = null;
   private emailPack: Array<string> = [];
   public googleAuth: gapi.auth2.GoogleAuth;
@@ -42,6 +44,51 @@ export class SubscriptionListService {
     private _login: LoginService,
     private zone: NgZone
   ) {}
+
+
+  sortAndSearchTest() {
+    //let emailWords = this.emailPack[0].split(/\s+/);
+    //console.log(emailWords);
+
+    /*
+    let realIndex = emailWords.indexOf("From:");
+    console.log("Here is what the real search returned: " + realIndex);
+    */
+
+    /*
+    let linearIndex = linearSearch(emailWords, "From:");
+    console.log("Here is what linearSearch returned: " + linearIndex);
+    */
+
+
+    /*
+    let realSorted = emailWords.sort();
+    //console.log("Here is the real sort: " + realSorted);
+    */
+
+    /*
+    let selectionSorted = selectionSort(emailWords);
+    console.log("Here is selection sort: " + selectionSorted)
+    if (selectionSorted == realSorted) {
+      console.log("Selection sorted and real sorted arrays are identical.");
+    }
+    */
+
+    /*
+    let bubbleSorted = bubbleSort(emailWords);
+    console.log("Here is bubble sort: " + bubbleSorted);
+    if (bubbleSorted == realSorted) {
+      console.log("Bubble sorted and real sorted arrays are identical.");
+    }*/
+
+
+    /*
+    let binaryIndex = binarySearch(realSorted, "From:");
+    console.log("Here is what binarySearch returned: " + binaryIndex);
+    console.log("Binary search result: " + realSorted[binaryIndex]);
+    */
+
+  }
 
   /**
    * Initiates Google Auth Service to access Google Drive API
@@ -69,11 +116,10 @@ export class SubscriptionListService {
 
   /**
    * Locates the fileId of emails
-   * @param { CredentialData } - token: Access token to invoke Drive API
+   * @param { CredentialData } token: Access token to invoke Drive API
    */
   searchForTestFile(token:CredentialData) {
     gapi.auth.setToken({access_token: token.credential.accessToken});
-    console.log(this.googleAuth.isSignedIn);
     gapi.client.drive.files.list({
       q:"name='TestFile.mbox'",
       pageSize: 1000,
@@ -90,9 +136,9 @@ export class SubscriptionListService {
 
   /**
    * Sets fileId for email data, begins file scan by calling scanEmail();
-   * @param { string } - fileId: Google Drive API file ID to retrieve email data from
+   * @param { string } fileId: Google Drive API file ID to retrieve email data from
    */
-  setUploadSrc(fileId:string) {
+  private setUploadSrc(fileId:string) {
     // Get email data: FILE READ
     this.dataSrc=fileId;
     let request = gapi.client.drive.files.get({
@@ -113,7 +159,7 @@ export class SubscriptionListService {
   isDataUploaded() {
     let status: Boolean;
     //Call external function to check whether an upload has occured
-    if (this.dataSrc == "null") {
+    if (this.dataSrc == null) {
       status = false;
     } else {
       status = true;
@@ -124,10 +170,13 @@ export class SubscriptionListService {
   /**
    * Scans emails found at source URL and adds subscriptions to subscription list
    */
-  scanEmail() {
+  private scanEmail() {
     //Analyze emails: STRING MANIPULATION
     this.splitMail();
-    let emailAddresses: Array<String> = [];
+    //let emailAddresses: Array<String> = [];
+
+    this.sortAndSearchTest();
+
     for (let email of this.emailPack) {
       let index = email.search("From: ");
       let serviceName: String = email
@@ -154,24 +203,32 @@ export class SubscriptionListService {
         address = myArray.join("");
         let name = address.slice(0, address.search(/\./));
 
-        if (
-          this.subscriptions == {} ||
-          (Object.keys(this.subscriptions).indexOf(name) == -1 &&
-            this.avoidAddresses.indexOf(address) == -1)
-        ) {
+        if (this.subscriptions == { } || (Object.keys(this.subscriptions).indexOf(name) == -1 && this.avoidAddresses.indexOf(address) == -1)) {
           this._newSub.searchForCompany(address);
-          this.subscriptions[name] = this._newSub;
-          console.log(this._newSub.getData());
+          let newSubData = new SubscriptionData;
+          newSubData = this._newSub.getData();
+          this.subscriptions[name] = newSubData;
+        } else if (Object.keys(this.subscriptions).indexOf(name) != -1) {
+          this.subscriptions[name].emailFrequency++;
         }
       }
     }
+
+    this.printSubscriptionData();
+
+  }
+
+  /**
+   * Prints out list of subscriptions to console
+   */
+  printSubscriptionData() {
     console.log(this.subscriptions);
   }
 
   /**
    * Splits given email data string into array of emails
    */
-  splitMail(): void {
+  private splitMail(): void {
     let emailLines: Array<string> = this.emailData.split("\n");
     let newMail = "";
     let emailCount = 0;

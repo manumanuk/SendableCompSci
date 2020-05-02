@@ -23,29 +23,40 @@ export class SubscriptionService {
    */
   constructor(private _database: AngularFireDatabase) {
     this.databaseRef = _database.list(this.databasePath);
+    this.databaseRef.valueChanges().subscribe(data => {
+      this.dbRead = data;
+    });
   }
 
   /**
-   * Crawls web and database to find company's privacy policy and privacy email
-   * @param service - Name of company to search for
+   * Searches existing database to find company's privacy policy and privacy email
+   * @param { String } service - Name of company to search for
+   * @returns { number } - Returns -1 if company name is not in database, else returns 0
    */
-  readDatabase(service: String) {
+  private readDatabase(service: String) {
     //Check first to see if company name is already in the database
     //DATABASE FILE READING
     for (let key of this.dbRead) {
       if (key.name == service) {
         this.subscriptionData=key;
-        return;
+        return 0;
       }
     }
-    //Call function that crawls web for company's privacy policy
+    return -1;
+  }
+
+  /**
+   * Crawls web for privacy policy and email information
+   * @param { String } - service - Name of company to search for
+   */
+  private crawlWeb(service: String) {
     /** Code to be added later */
     this.subscriptionData.name = service;
     this.subscriptionData.logoSrc="example-source-link.png";
-    this.subscriptionData.emailFrequency=3;
+    this.subscriptionData.emailFrequency=1;
     this.subscriptionData.deleteAccountURL="sample-url.com"
     this.subscriptionData.pipAddress="privacy.sample-company@domain.com"
-
+    return 0
     //DATABASE FILE WRITING
     //Add information to database of available companies
     //this.databaseRef.push(this.subscriptionData)
@@ -68,13 +79,15 @@ export class SubscriptionService {
   }
 
   /**
-   * Reads values in database and calls the read database function
-   * @param service - Name of company to search for
+   * Searches for a given company name in database or crawls web
+   * @param { String } service - Name of company to search for
    */
   searchForCompany (service: String) {
-    this.databaseRef.valueChanges().subscribe(data=> {
-      this.dbRead = data;
-      this.readDatabase(service);
-    })
+    if (this.readDatabase(service) == -1) {
+      this.crawlWeb(service);
+      return
+    } else {
+      return
+    }
   }
 }

@@ -75,10 +75,4 @@ export class DashboardPageComponent implements OnInit {
     this._PIPEDAList.downloadAddresses();
   }
 
-  /**
-   * Initiates scan for subscriptions
-   */
-  scanEmail() {
-    this._subscriptionList.scanEmail();
-  }
 }

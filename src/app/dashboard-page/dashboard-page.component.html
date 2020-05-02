@@ -1,13 +1,14 @@
 <main>
   <div class="dashboard-container">
-    <div *ngIf="isEmailUploaded(); else subListView">
+    <div *ngIf="!isEmailUploaded(); else subListView">
       <div style="height:10px;"></div>
       <button class="dash-button brown-button" (click)="uploadData()">Begin Scanning!</button>
       <p class="instructions">To begin the search, go to <a target="_blank" href="https://takeout.google.com/settings/takeout">Google Takeout</a>, and request a Gmail data export of your choice. Once you receive the export, place it in your main Google Drive folder, name it "TestFile.mbox", and press the button above.</p>
     </div>
-    <!--<app-email-upload *ngIf="isEmailUploaded(); else subListView"></app-email-upload>-->
     <ng-template #subListView>
-      <app-subscription-list></app-subscription-list>
+      <div class="subscription-list">
+        <p>Please check the console.</p>
+      </div>
     </ng-template>
   </div>
 </main>

@@ -11,3 +11,11 @@
   font-size: 20px;
   box-sizing: border-box;
 }
+
+.subscription-list {
+  margin: 0 auto;
+  text-align: center;
+  font-size: medium;
+  padding: 30px;
+  display: block;
+}
