@@ -1,7 +1,10 @@
 # SendableCompSci - ICS4U0
 
+## Sorting and Searching
+Code associated with the ICS 4U0 Sorting and Searching assignment can be found in the files [subscription-list.service.ts](./src/app/services/subscription-list.service.ts/) (implementation of sorting and searching algorithms), and [sorting-searching-algorithms.ts](./src/app/services/prototypes/sorting-searching-algorithms.ts/) (algorithm function definitions, computational analysis and YouTube video answers).
+
 ## Files
-Code associated with the ICS 4U0 Files assignment can be found in the files [subscription-list.service.ts](./src/app/services/subscription-list.service.ts/) ([text file](./src/assets/sampleEmailData.txt) IO + datatype limitations), and [subscription.service.ts](./src/app/services/subscription.service.ts/) (database input and output).
+Code associated with the ICS 4U0 Files assignment can be found in the files [subscription-list.service.ts](./src/app/services/subscription-list.service.ts/) (Google Drive API input), and [subscription.service.ts](./src/app/services/subscription.service.ts/) (database input and output -> currently commented out).
 
 
 # Angular
