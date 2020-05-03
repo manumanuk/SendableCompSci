@@ -44,61 +44,57 @@ export class SubscriptionListService {
     private zone: NgZone
   ) {}
 
-
+  /**
+   * Performs various sorting and searching algorithms on ~5 MB of Email data, measures timings to complete.
+   */
+  /*
   sortAndSearchTest() {
     let emailWords = this.emailData.slice(0, 2800000).split(/\s+/);
-    //console.log("This" + emailWords);
+    console.log(emailWords);
 
-    /*
     let realIndex = emailWords.indexOf("From:");
     console.log("Here is what the real search returned: " + realIndex);
-    */
-
 
     let startTime = performance.now();
     let linearIndex = linearSearch(emailWords, "crazy");
-    // console.log("Here is what linearSearch returned: " + linearIndex);
+    console.log("Here is what linearSearch returned: " + linearIndex);
     let endTime = performance.now();
     console.log("Linear Search performed in " + (endTime-startTime));
 
-
     startTime = performance.now();
     let realSorted = emailWords.sort();
-    // console.log("Here is the real sort: ");
-    // console.log(realSorted);
+    console.log("Here is the real sort: ");
+    console.log(realSorted);
     endTime = performance.now();
     console.log("Built-in sort performed in " + (endTime - startTime));
 
-
     startTime = performance.now();
     let selectionSorted = selectionSort(emailWords);
-    // console.log("Here is selection sort: ");
-    // console.log(selectionSorted);
-    // if (selectionSorted == realSorted) {
-    //   console.log("Selection sorted and real sorted arrays are identical.");
-    // }
+    console.log("Here is selection sort: ");
+    console.log(selectionSorted);
+    if (selectionSorted == realSorted) {
+      console.log("Selection sorted and real sorted arrays are identical.");
+    }
     endTime = performance.now();
     console.log("Selection Sort performed in " + (endTime - startTime));
 
-
-
     startTime = performance.now();
     let bubbleSorted = bubbleSort(emailWords);
-    // console.log("Here is bubble sort: ");
-    // console.log(bubbleSorted);
-    // if (bubbleSorted == realSorted) {
-    //   console.log("Bubble sorted and real sorted arrays are identical.");
-    // }
+    console.log("Here is bubble sort: ");
+    console.log(bubbleSorted);
+    if (bubbleSorted == realSorted) {
+      console.log("Bubble sorted and real sorted arrays are identical.");
+    }
     endTime = performance.now();
     console.log("Bubble Sort performed in " + (endTime - startTime));
 
-
     startTime = performance.now();
-    let binaryIndex = binarySearch(bubbleSorted, "From:");
-    // console.log("Here is what binarySearch returned: " + binaryIndex);
+    let binaryIndex = binarySearch(realSorted, "From:");
+    console.log("Here is what binarySearch returned: " + binaryIndex);
     endTime = performance.now();
     console.log("Binary Search performed in " + (endTime - startTime));
   }
+  */
 
   /**
    * Initiates Google Auth Service to access Google Drive API
@@ -185,7 +181,7 @@ export class SubscriptionListService {
     this.splitMail();
     //let emailAddresses: Array<String> = [];
 
-    this.sortAndSearchTest();
+    //this.sortAndSearchTest();
 
     for (let email of this.emailPack) {
       let index = email.search("From: ");

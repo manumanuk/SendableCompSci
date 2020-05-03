@@ -94,7 +94,7 @@ export function binarySearch( stringArray: Array<string>, searchString: string )
  * RUNTIMES TO BE ADDED LATER (CURRENTLY RUNNING)
  * ----------------------------
  * BUBBLE SORT
- * Runtime: [To be updated later]
+ * Runtime: 3169338.41 ms (52 minutes)
  * The bubbleSort() function takes in a list of length n, and cycles through n in the first cycle,
  * then n-1, then n-2, and so on until n-n. It makes  This can be represented with n + (n-1) + (n-2) + (n-3) + ... + (n-n)
  * This can be rewritten as (n + n + n + n ... + n) - (1 + 2 + 3 + ... + n), which can be roughly simplified to n^2.
@@ -106,11 +106,12 @@ export function binarySearch( stringArray: Array<string>, searchString: string )
  * string which would come second-last in alpha order in its place, until all strings have been ordered correctly.
  *
  * SELECTION SORT
- * Runtime: [To be updated later]
+ * Runtime: 3174806.23 ms (52 minutes)
  * The selectionSort() function takes in a list of length n, and cycles through n in the first cycle, then n-1, then n-2, similar to bubble sort. Its iterations
  * can similarly be represented with (n + n + n + n + ... + n) - (1 + 2 + 3 + ... + n), which can be roughly simplified to n^2. Therefore, the computational
  * complexity in terms of comparisons for selection sort is also O(n^2). However, swaps occur such that only one swap occurs for every iteration of the array,
- * making the swaps computational complexity equivalent to only O(n).
+ * making the swaps computational complexity equivalent to only O(n). The empircal data supports the estimation that both bubble sort and selection sort have similar
+ * search times.
  *
  * BUILT-IN SORT
  * Runtime: 256.825 ms
@@ -127,15 +128,17 @@ export function binarySearch( stringArray: Array<string>, searchString: string )
  * to each value in an array. For a word that did not exist in the array, the algorithm took 2.59 ms.
  *
  * BINARY SEARCH
- * Runtime independent: [to be added later]
- * Runtime with Bubble Sort: [to be added later]
+ * Runtime independent: 0.76 ms
+ * Runtime with Bubble Sort: 3169339.17 ms (52 minutes)
  * A binary search algorithm is one in which the program looks at the middle element in a sorted array, and checks whether the given string/number is of a higher
  * or lower value. If it is higher, the bottom half of the array is cut off. If it is lower, the top half of the array is cut off. The cut array is then searched
  * in a similar fashion, and the array is continuously cut in halves until the value is either found or not found. This has a complexity of O(logn). In comparison
  * to a regular search, this is quite clearly a faster option if compared side by side with linear search. However, when the sorting is taken into account, using the
  * in-built sort function with complexity O(nlogn) would produce a complexity of O(nlogn), which is slower than linear search (complexity O(n)). Meanwhile, using a
  * bubble sort makes the binary search even slower, with a combined complexity of O(n^2*logn). As such, it is generally faster to use linear search unless data is
- * already sorted.
+ * already sorted. This can be seen in the data above, where, although the binary search on its own may seem to be quite fast, it is much slower than linear search when
+ * taken into consideration with the sorting speed. Even with the built-in sort function, the total time taken is well over 250 ms, compared to the maximum search time
+ * of a linear search, which took 2.59 ms.
  */
 
 
