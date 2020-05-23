@@ -1,5 +1,11 @@
 # SendableCompSci - ICS4U0
 
+## Documentation
+Documentation including the UML Case Diagram, UML Class Diagram, User Manual, Flowchart and Screenshots is available [here](./docs)
+
+## Extending Objects
+Code associated with the ICS 4U0 Extending Objects assignment can be found in the files [login.service.ts](./src/app/services/login.service.ts/) (super class LoginService) and [login-page.component.ts](./src/app/login-page/login-page.component.ts) (sub class LoginPageComponent), uses Inheritance.
+
 ## Sorting and Searching
 Code associated with the ICS 4U0 Sorting and Searching assignment can be found in the files [subscription-list.service.ts](./src/app/services/subscription-list.service.ts/) (implementation of sorting and searching algorithms), and [sorting-searching-algorithms.ts](./src/app/services/prototypes/sorting-searching-algorithms.ts/) (algorithm function definitions, computational analysis and YouTube video answers).
 
