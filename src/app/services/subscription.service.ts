@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { SubscriptionData } from './prototypes/subscription-data-interface'
 import { AngularFireDatabase, AngularFireList } from '@angular/fire/database'
+import { HttpClient } from '@angular/common/http'
+import { CrawlData } from '../services/prototypes/crawl-data'
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +12,6 @@ import { AngularFireDatabase, AngularFireList } from '@angular/fire/database'
  * @class
  */
 export class SubscriptionService {
-  //private databaseReader:Observable<SubscriptionData[]>;
   private dbRead: SubscriptionData[];
   private subscriptionData = new SubscriptionData;
   private databasePath = "/companies";
@@ -21,7 +22,7 @@ export class SubscriptionService {
    * @constructor
    * @param { AngularFireDatabase } _database - Creates private object of type AngularFireDatabase
    */
-  constructor(private _database: AngularFireDatabase) {
+  constructor(private _database: AngularFireDatabase, private _http: HttpClient) {
     this.databaseRef = _database.list(this.databasePath);
     this.databaseRef.valueChanges().subscribe(data => {
       this.dbRead = data;
@@ -50,13 +51,7 @@ export class SubscriptionService {
    * @param { String } - service - Name of company to search for
    */
   private crawlWeb(service: String) {
-    /** Code to be added later */
-    this.subscriptionData.name = service;
-    this.subscriptionData.logoSrc="example-source-link.png";
-    this.subscriptionData.emailFrequency=1;
-    this.subscriptionData.deleteAccountURL="sample-url.com"
-    this.subscriptionData.pipAddress="privacy.sample-company@domain.com"
-    return 0
+    return this._http.post<Array<CrawlData>>("http://localhost:5001/sendablecompsci/us-central1/scraper", JSON.stringify({ text: "https://" + service }));
     //DATABASE FILE WRITING
     //Add information to database of available companies
     //this.databaseRef.push(this.subscriptionData)
@@ -82,12 +77,31 @@ export class SubscriptionService {
    * Searches for a given company name in database or crawls web
    * @param { String } service - Name of company to search for
    */
-  searchForCompany (service: String) {
-    if (this.readDatabase(service) == -1) {
-      this.crawlWeb(service);
-      return
+  async searchForCompany (service: String) {
+    if (this.readDatabase(service) != -1) {
+      return;
     } else {
-      return
+      this.subscriptionData.name = service;
+      this.subscriptionData.emailFrequency = 1;
+      let myVar = await this.crawlWeb(service).toPromise<Array<CrawlData>>();
+      if (myVar != null) {
+        let data: CrawlData = myVar[0];
+        if (data.favicon == null) {
+          this.subscriptionData.logoSrc = '../../assets/images/question-mark-icon.PNG';
+        } else if (data.favicon.startsWith('https://')) {
+          this.subscriptionData.logoSrc = data.favicon;
+        } else if (data.favicon.startsWith("//")) {
+          this.subscriptionData.logoSrc = "https:" + data.favicon;
+        }else if (data.favicon.startsWith('/')) {
+          this.subscriptionData.logoSrc = data.url + data.favicon;
+        } else {
+          this.subscriptionData.logoSrc = data.url + '/' + data.favicon;
+        }
+        this.databaseRef.push(this.subscriptionData);
+      } else {
+        this.subscriptionData.logoSrc="../../assets/images/question-mark-icon.PNG"
+      }
+      return;
     }
   }
 }

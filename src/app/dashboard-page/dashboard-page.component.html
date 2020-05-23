@@ -1,14 +1,90 @@
-<main>
-  <div class="dashboard-container">
-    <div *ngIf="!isEmailUploaded(); else subListView">
-      <div style="height:10px;"></div>
-      <button class="dash-button brown-button" (click)="uploadData()">Begin Scanning!</button>
-      <p class="instructions">To begin the search, go to <a target="_blank" href="https://takeout.google.com/settings/takeout">Google Takeout</a>, and request a Gmail data export of your choice. Once you receive the export, place it in your main Google Drive folder, name it "TestFile.mbox", and press the button above.</p>
-    </div>
-    <ng-template #subListView>
-      <div class="subscription-list">
-        <p>Please check the console.</p>
+<main style="display: inline-block;">
+  <div *ngIf="!isEmailUploaded(); then uploadView; else subListView"></div>
+
+    <ng-template #uploadView>
+      <div class="dashboard-container" style="width: 97vw;margin: 20px; border: 1px black solid; padding: 30px;">
+        <div class="dashboard-container" style="width: 660px; height: 290px; padding: 20px;">
+          <h1 class="header-text" style="padding: 50px 0px">Upload your email data to get started.</h1>
+          <button class="dash-button brown-button" (click)="uploadData()">Begin Scanning</button>
+          <p class="instructions" id="aboutLink" routerLink="/about">Find out how.</p>
+        </div>
+
+        <div>
+          <h1 class="header-text" style="font-style: italic; padding: 30px; font-size: 35px;">OR</h1>
+        </div>
+
+        <div class="dashboard-container" style="width: 660px; height: 130px;">
+          <h1 class="header-text" style="width: 410px; padding: 25px 0px; display: inline-block;">Download the PIPEDA request template.</h1>
+          <button class="dash-button brown-button" style="display: inline-block; margin: 25px; position: relative; bottom: 20px;">Download</button>
+
+        </div>
       </div>
     </ng-template>
-  </div>
+
+
+    <ng-template #subListView>
+      <div class="dashboard-container subscriptions-box">
+
+        <div id="sublist-header">
+          <h1 class="header-text" style="text-align: center; font-size: 34px; padding: 10px; display: inline-block;">Select from the following to send PIPEDA requests.</h1>
+          <button id="sort-button"><p style="font-weight: 100; font-family: Raleway; font-size: 30px; display: inline;">Most Spam</p><img src="../../assets/images/sort-arrow.png" style="display: inline-block; height: 20px; padding-left: 10px;"></button>
+        </div>
+
+        <div id="sublist-options">
+          <div>
+            <h1 class="header-text" style="padding: 10px; font-size: 32px;">Send using our easy-to-use draft generator</h1>
+            <button class="blue-button dash-button sublist-button">Draft Deletion Email</button>
+            <button class="blue-button dash-button sublist-button">Draft Retrieval Email</button>
+           </div>
+
+          <div>
+            <h1 class="header-text" style="font-style: italic; padding: 20px; font-size: 35px;">OR</h1>
+          </div>
+
+          <div>
+            <h1 class="header-text" style="padding: 10px; font-size: 32px;">Grab a list of email addresses</h1>
+            <button class="brown-button dash-button sublist-button" style="width: 80%;">Download Selected Addresses</button>
+          </div>
+        </div>
+
+        <div id="subscriptions-list">
+          <div style="height:7px;"></div>
+          <div *ngFor="let subscription of getSubList()[0]">
+            <div class="dashboard-container" id="subscription-list-item">
+              <div style="display:inline-block;">
+                <img id="company-logo" bind-src="getSubList()[1][subscription].logoSrc">
+                <h1 id="company-name" [ngStyle]="{'font-size': textResize(subscription)[0],'bottom': textResize(subscription)[1]}">{{ subscription }}</h1>
+                <div class="line" style="height: 90px; bottom: 5px; position: relative;"></div>
+              </div>
+
+              <div style="display:inline-block;">
+                <h1 class="header-text" style="display: inline; font-size: 25px; margin: 0px 10px; bottom: 15px; position:relative;">Email Frequency
+                </h1>
+                <h1 class="header-text" style="padding:0px; font-size: 60px; bottom: 20px; position: relative;">{{ getSubList()[1][subscription].emailFrequency }}</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--<div id="subscriptions-list">
+          <div style="height:7px;"></div>
+          <div>
+            <div class="dashboard-container" id="subscription-list-item">
+              <div style="display: inline-block;">
+                <img id="company-logo" src="../../assets/images/question-mark-icon.PNG">
+                <h1 [ngStyle]="{'font-size': textResize(this.name)[0], 'bottom': textResize(this.name)[1]}" id="company-name" >{{name}}</h1>
+                <div class="line" style="height: 90px; bottom: 5px; position: relative;"></div>
+              </div>
+              <div style="display:inline-block;">
+                <h1 class="header-text" style="display: inline; font-size: 25px; margin: 0px 10px; bottom: 15px; position:relative;">Email Frequency</h1>
+                <h1 class="header-text" style="padding:0px; font-size: 60px; bottom: 20px; position: relative;">15</h1>
+              </div>
+            </div>
+          </div>
+        </div>-->
+
+      </div>
+    </ng-template>
+
+
 </main>

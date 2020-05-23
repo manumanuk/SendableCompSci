@@ -8,8 +8,6 @@ import { LoginPageComponent } from './login-page/login-page.component';
 import { AboutPageComponent } from './about-page/about-page.component';
 import { NotFoundPageComponent } from './not-found-page/not-found-page.component';
 import { DashboardPageComponent } from "./dashboard-page/dashboard-page.component";
-import { EmailUploadComponent } from "./email-upload/email-upload.component";
-import { SubscriptionListComponent } from "./subscription-list/subscription-list.component";
 
 import { environment } from "../environments/environment";
 import { AngularFireModule } from "@angular/fire";
@@ -24,8 +22,6 @@ import { AngularFireAuthModule } from "@angular/fire/auth";
     AboutPageComponent,
     NotFoundPageComponent,
     DashboardPageComponent,
-    EmailUploadComponent,
-    SubscriptionListComponent,
   ],
   imports: [
     BrowserModule,

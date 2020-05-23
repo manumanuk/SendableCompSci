@@ -17,6 +17,7 @@ const SCOPES: Array<string> = ["https://www.googleapis.com/auth/drive.file", "ht
  * @class
  */
 export class LoginService {
+  public googleAuth: gapi.auth2.GoogleAuth;
   private user: Observable<firebase.User>;
   private userDetails: firebase.User = null;
   private credentialData: CredentialData = null;
@@ -109,13 +110,36 @@ export class LoginService {
    * @returns { Promise<firebase.auth.UserCredential> } -  Provides a Promise containing access token
    */
   refreshCredentials(): Promise<firebase.auth.UserCredential> {
-    /*if (this.credentialData.credential==null){
+    if (this.credentialData.credential==null){
       return this.userDetails.reauthenticateWithPopup(new firebase.auth.GoogleAuthProvider().addScope(SCOPES.join(', ')));
     } else {
-      console.log("here");
       return this.userDetails.reauthenticateWithCredential(this.credentialData.credential);
     }
+  }
+   /* return this.userDetails.reauthenticateWithCredential(this.credentialData.credential);
   }*/
-    return this.userDetails.reauthenticateWithCredential(this.credentialData.credential);
+
+  /**
+ * Initiates Google Auth Service to access Google Drive API
+ */
+  initGoogleClient() {
+    return new Promise((resolve, reject) => {
+      gapi.load("client:auth2", () => {
+        return gapi.client
+          .init({
+            apiKey: "AIzaSyD8YHcpEJKBFnrTt4DXftDVdsOw9XGYLrg",
+            clientId:
+              "934426938633-6t4rnqdo9n7epqdgjb5hkptvs532upl1.apps.googleusercontent.com",
+            discoveryDocs: [
+              "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest",
+            ],
+            scope: "https://www.googleapis.com/auth/drive.file",
+          })
+          .then(() => {
+            this.googleAuth = gapi.auth2.getAuthInstance();
+            resolve();
+          });
+      });
+    });
   }
 }

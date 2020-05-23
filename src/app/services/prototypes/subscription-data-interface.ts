@@ -4,7 +4,7 @@
  */
 export class SubscriptionData {
   name: String;
-  emailFrequency: Number;
+  emailFrequency: number;
   pipAddress: String;
   logoSrc: String;
   deleteAccountURL: String;

@@ -1,8 +1,6 @@
-import { Injectable, NgZone, Output } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { SubscriptionService } from './subscription.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CredentialData } from './prototypes/credential-prototype'
-import { LoginService } from './login.service';
 import { PIPEDAListService } from './pipedalist.service';
 import { SubscriptionData } from './prototypes/subscription-data-interface'
 import { bubbleSort, selectionSort, linearSearch, binarySearch } from './prototypes/sorting-searching-algorithms'
@@ -28,20 +26,19 @@ export class SubscriptionListService {
     "youtube.com",
     "hotmail.com",
     "yahoo.com",
+    "yahoo.ca",
     "outlook.com",
     "docs.google.com",
+    "youtube.com",
   ];
 
   /**
    * Creates Subscripton List class
    * @constructor
-   * @param { HttpClient } _http - HttpClient Object to handle HTTP requests
+   * @param { SubscriptionService } _newSub - Handles generation of new SubscriptionData objects
    */
   constructor(
-    private _http: HttpClient,
     private _newSub: SubscriptionService,
-    private _login: LoginService,
-    private zone: NgZone
   ) {}
 
   /**
@@ -176,10 +173,9 @@ export class SubscriptionListService {
   /**
    * Scans emails found at source URL and adds subscriptions to subscription list
    */
-  private scanEmail() {
+  private async scanEmail() {
     //Analyze emails: STRING MANIPULATION
     this.splitMail();
-    //let emailAddresses: Array<String> = [];
 
     //this.sortAndSearchTest();
 
@@ -210,9 +206,10 @@ export class SubscriptionListService {
         let name = address.slice(0, address.search(/\./));
 
         if (this.subscriptions == { } || (Object.keys(this.subscriptions).indexOf(name) == -1 && this.avoidAddresses.indexOf(address) == -1)) {
-          this._newSub.searchForCompany(address);
+          await this._newSub.searchForCompany(address);
           let newSubData = new SubscriptionData;
-          newSubData = this._newSub.getData();
+          newSubData = JSON.parse(JSON.stringify(this._newSub.getData()));
+          this._newSub.clearData();
           this.subscriptions[name] = newSubData;
         } else if (Object.keys(this.subscriptions).indexOf(name) != -1) {
           this.subscriptions[name].emailFrequency++;
@@ -220,7 +217,7 @@ export class SubscriptionListService {
       }
     }
 
-    this.printSubscriptionData();
+    console.log(this.subscriptions);
 
   }
 
@@ -228,7 +225,7 @@ export class SubscriptionListService {
    * Prints out list of subscriptions to console
    */
   printSubscriptionData() {
-    console.log(this.subscriptions);
+    return this.subscriptions;
   }
 
   /**

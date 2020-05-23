@@ -27,7 +27,7 @@ export class DashboardPageComponent implements OnInit {
    * Loads any scripts needed for Dashboard Page
    */
   ngOnInit(): void {
-    this._subscriptionList.initClient();
+    this._login.initGoogleClient();
   }
 
   /**
@@ -75,4 +75,37 @@ export class DashboardPageComponent implements OnInit {
     this._PIPEDAList.downloadAddresses();
   }
 
+  /**
+   * Returns subscription data associated with email
+   * @returns {Array<any>} - Returns an array where 1st element is an array of subscription names, 2nd is object containing SubscriptionData objects associated with names
+   */
+  getSubList() {
+    let data = this._subscriptionList.printSubscriptionData();
+    //Array of names, SubscriptionData object
+    return [Object.keys(data), data];
+  }
+
+  textResize(word:string) {
+    if (word == null) {
+      return ['1px', '1px'];
+    }
+    let stringArray = word.split('');
+    let shortLetters = stringArray.filter(letter => {
+      letter = letter.toLowerCase();
+      if (letter === 'i' || letter === 'f' || letter === 'j' || letter === 'l' || letter === 'r' || letter === 't' || letter === ' ') {
+        return letter;
+      }
+    }).length;
+    let longLetters = stringArray.filter(letter => {
+      letter = letter.toLowerCase();
+      if (letter === 'm' || letter === 'w') {
+        return letter;
+      }
+    }).length;
+    let stringSize = word.length + longLetters - shortLetters*0.5;
+    let fontSize = (400 / stringSize) * 1.7;
+    if (fontSize > 80)
+      fontSize = 80;
+    return [fontSize + 'px', 20+(80-fontSize)*0.3 + 'px'];
+  }
 }
