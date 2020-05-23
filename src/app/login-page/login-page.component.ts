@@ -10,6 +10,7 @@ import { Router } from '@angular/router'
 /**
  * Controls View of Login Page and calls login service for authentication
  * @class
+ * @augments LoginService
  * @implements { OnInit }
  */
 export class LoginPageComponent extends LoginService implements OnInit {
