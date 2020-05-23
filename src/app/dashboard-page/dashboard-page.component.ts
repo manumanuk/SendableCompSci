@@ -51,7 +51,7 @@ export class DashboardPageComponent implements OnInit {
    * @param { String } type - Is this a retrieval or deletion request?
    */
   addToPIPEDAList(id: Number, type: String) {
-    this._PIPEDAList.add(this._subscriptionList.getSubscription(id), type)
+    //this._PIPEDAList.add(this._subscriptionList.getSubscription(id), type)
   }
 
   /**
@@ -80,10 +80,13 @@ export class DashboardPageComponent implements OnInit {
    * @returns {Array<any>} - Returns an array where 1st element is an array of subscription names, 2nd is object containing SubscriptionData objects associated with names
    */
   getSubList() {
-    let data = this._subscriptionList.printSubscriptionData();
     //Array of names, SubscriptionData object
-    return [Object.keys(data), data];
+    return this._subscriptionList.getSubscriptionList();
   }
+
+  /*getSubList() {
+    return this._subscriptionList.subscriptions;
+  }*/
 
   textResize(word:string) {
     if (word == null) {
@@ -107,5 +110,9 @@ export class DashboardPageComponent implements OnInit {
     if (fontSize > 80)
       fontSize = 80;
     return [fontSize + 'px', 20+(80-fontSize)*0.3 + 'px'];
+  }
+
+  printData() {
+    this.getSubList[0].subscribe(res=> console.log(res));
   }
 }

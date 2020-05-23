@@ -33,7 +33,7 @@
         <div id="sublist-options">
           <div>
             <h1 class="header-text" style="padding: 10px; font-size: 32px;">Send using our easy-to-use draft generator</h1>
-            <button class="blue-button dash-button sublist-button">Draft Deletion Email</button>
+            <button class="blue-button dash-button sublist-button" (click)="printData()">Draft Deletion Email</button>
             <button class="blue-button dash-button sublist-button">Draft Retrieval Email</button>
            </div>
 
@@ -49,18 +49,18 @@
 
         <div id="subscriptions-list">
           <div style="height:7px;"></div>
-          <div *ngFor="let subscription of getSubList()[0]">
+          <div *ngFor="let subscription of getSubList()">
             <div class="dashboard-container" id="subscription-list-item">
               <div style="display:inline-block;">
-                <img id="company-logo" bind-src="getSubList()[1][subscription].logoSrc">
-                <h1 id="company-name" [ngStyle]="{'font-size': textResize(subscription)[0],'bottom': textResize(subscription)[1]}">{{ subscription }}</h1>
+                <img id="company-logo" bind-src="(subscription | async).logoSrc">
+                <h1 id="company-name" [ngStyle]="{'font-size': textResize((subscription | async).name),'bottom': textResize((subscription | async).name)}">{{ (subscription | async).name }}</h1>
                 <div class="line" style="height: 90px; bottom: 5px; position: relative;"></div>
               </div>
 
               <div style="display:inline-block;">
                 <h1 class="header-text" style="display: inline; font-size: 25px; margin: 0px 10px; bottom: 15px; position:relative;">Email Frequency
                 </h1>
-                <h1 class="header-text" style="padding:0px; font-size: 60px; bottom: 20px; position: relative;">{{ getSubList()[1][subscription].emailFrequency }}</h1>
+                <h1 class="header-text" style="padding:0px; font-size: 60px; bottom: 20px; position: relative;">{{ (subscription | async).emailFrequency }}</h1>
               </div>
             </div>
           </div>

@@ -4,6 +4,8 @@ import { CredentialData } from './prototypes/credential-prototype'
 import { PIPEDAListService } from './pipedalist.service';
 import { SubscriptionData } from './prototypes/subscription-data-interface'
 import { bubbleSort, selectionSort, linearSearch, binarySearch } from './prototypes/sorting-searching-algorithms'
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators'
 
 
 @Injectable({
@@ -15,11 +17,11 @@ import { bubbleSort, selectionSort, linearSearch, binarySearch } from './prototy
  * @class
  */
 export class SubscriptionListService {
-  private dataSrc: string = null; // Google Drive API will provide a way to access email zip file, for now treated as a url
-  private subscriptions:Object = { }; //Array of SubscriptionData Objects attached to names
+  private dataSrc: string = null; // Google Drive API fileID to get email data from
+  //private subscriptions:Object = { }; //Array of SubscriptionData Objects attached to names
+  private subscriptions: {[name:string]: Observable<SubscriptionData>} = {};
   private emailData: string = null;
   private emailPack: Array<string> = [];
-  public googleAuth: gapi.auth2.GoogleAuth;
   private avoidAddresses: Array<String> = [
     "google.com",
     "gmail.com",
@@ -30,6 +32,8 @@ export class SubscriptionListService {
     "outlook.com",
     "docs.google.com",
     "youtube.com",
+    'pdsb.net',
+    'peelsb.com'
   ];
 
   /**
@@ -94,35 +98,11 @@ export class SubscriptionListService {
   */
 
   /**
-   * Initiates Google Auth Service to access Google Drive API
-   */
-  initClient() {
-    return new Promise((resolve, reject) => {
-      gapi.load("client:auth2", () => {
-        return gapi.client
-          .init({
-            apiKey: "AIzaSyD8YHcpEJKBFnrTt4DXftDVdsOw9XGYLrg",
-            clientId:
-              "934426938633-6t4rnqdo9n7epqdgjb5hkptvs532upl1.apps.googleusercontent.com",
-            discoveryDocs: [
-              "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest",
-            ],
-            scope: "https://www.googleapis.com/auth/drive.file",
-          })
-          .then(() => {
-            this.googleAuth = gapi.auth2.getAuthInstance();
-            resolve();
-          });
-      });
-    });
-  }
-
-  /**
    * Locates the fileId of emails
    * @param { CredentialData } token: Access token to invoke Drive API
    */
   searchForTestFile(token:CredentialData) {
-    gapi.auth.setToken({access_token: token.credential.accessToken});
+    //gapi.auth.setToken({access_token: token.credential.accessToken});
     gapi.client.drive.files.list({
       q:"name='TestFile.mbox'",
       pageSize: 1000,
@@ -173,7 +153,7 @@ export class SubscriptionListService {
   /**
    * Scans emails found at source URL and adds subscriptions to subscription list
    */
-  private async scanEmail() {
+  private scanEmail() {
     //Analyze emails: STRING MANIPULATION
     this.splitMail();
 
@@ -181,7 +161,7 @@ export class SubscriptionListService {
 
     for (let email of this.emailPack) {
       let index = email.search("From: ");
-      let serviceName: String = email
+      let serviceName: string = email
         .slice(
           index + "From: ".length,
           index + email.slice(index, index + 1000).search("\n")
@@ -189,7 +169,7 @@ export class SubscriptionListService {
         .trim();
 
       if (serviceName.search(">") != -1) {
-        let address: String = "";
+        let address: string = "";
         let myArray = [];
         let firstDot = false;
         for (let i = serviceName.search(">") - 1; i >= 0; i--) {
@@ -205,27 +185,38 @@ export class SubscriptionListService {
         address = myArray.join("");
         let name = address.slice(0, address.search(/\./));
 
-        if (this.subscriptions == { } || (Object.keys(this.subscriptions).indexOf(name) == -1 && this.avoidAddresses.indexOf(address) == -1)) {
-          await this._newSub.searchForCompany(address);
-          let newSubData = new SubscriptionData;
-          newSubData = JSON.parse(JSON.stringify(this._newSub.getData()));
+        /*let checkDuplicate: boolean = function (subscriptionData: SubscriptionData) => {
+          if (subscriptionData.name == name) {
+            return true;
+          } else {
+            return false;
+          }
+        }*/
+        if (this.subscriptions == {} || (Object.keys(this.subscriptions).indexOf(name) == -1 && this.avoidAddresses.indexOf(address) == -1)) {
+          //await
+          this._newSub.searchForCompany(address, name);
+          let newSubData: Observable<SubscriptionData> = this._newSub.getData();
           this._newSub.clearData();
+          console.log(name);
+          newSubData.subscribe(res=>console.log(res), err=> console.log(err))
           this.subscriptions[name] = newSubData;
         } else if (Object.keys(this.subscriptions).indexOf(name) != -1) {
-          this.subscriptions[name].emailFrequency++;
+          this.subscriptions[name] = this.subscriptions[name].pipe(map(subscriptionData => {
+            subscriptionData.emailFrequency++;
+            return subscriptionData;
+          }));
         }
       }
     }
-
+    console.log('completed');
     console.log(this.subscriptions);
-
   }
 
   /**
    * Prints out list of subscriptions to console
    */
-  printSubscriptionData() {
-    return this.subscriptions;
+  getSubscriptionList() {
+    return Object.values(this.subscriptions);
   }
 
   /**

@@ -18,7 +18,7 @@ const scrapeMetatags = (text) => {
       links[i] = $(e).attr('href');
     });
 
-    let imageSrc = $('link[rel="shortcut icon"]').attr('href');
+    var imageSrc = $('link[rel="shortcut icon"]').attr('href');
     if (imageSrc === undefined) {
       imageSrc = $('link[rel="icon"]').attr('href');
     }
@@ -28,8 +28,8 @@ const scrapeMetatags = (text) => {
 
     return {
       url,
-      title: $('title').first().text(),
-      favicon: imageSrc,
+      //title: $('title').first().text(),
+      logoSrc: imageSrc,
       //links
     }
   });

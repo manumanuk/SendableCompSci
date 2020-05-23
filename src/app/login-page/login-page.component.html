@@ -13,7 +13,7 @@
   </div>
   <div>
     <button class="blue-button learn-more" routerLink="/about">Learn More</button>
-    <img *ngIf="!getLoginStatus(); else goToDashboard" (click)="signIn()" class="sign-in-button" src="../../assets/images/googleSignIn.png">
+    <img *ngIf="!isLoggedIn(); else goToDashboard" (click)="login()" class="sign-in-button" src="../../assets/images/googleSignIn.png">
   </div>
   <ng-template #goToDashboard>
     <button class="brown-button dashboard-button" routerLink="/dashboard">Go to Dashboard</button>

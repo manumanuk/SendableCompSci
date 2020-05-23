@@ -17,7 +17,7 @@ export class PIPEDAListService {
    * Creates PIPEDAListService class
    * @constructor
    */
-  constructor() {}
+  //constructor() {}
 
   /**
    *
