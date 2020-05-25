@@ -16,7 +16,7 @@ import { bubbleSort, selectionSort, linearSearch, binarySearch } from './prototy
  */
 export class SubscriptionListService {
   private dataSrc: string = null; // Google Drive API will provide a way to access email zip file, for now treated as a url
-  private subscriptions:Object = { }; //Array of SubscriptionData Objects attached to names
+  private subscriptions:{[name:string]:SubscriptionData} = { }; //Array of SubscriptionData Objects attached to names
   private emailData: string = null;
   private emailPack: Array<string> = [];
   public googleAuth: gapi.auth2.GoogleAuth;
@@ -30,6 +30,8 @@ export class SubscriptionListService {
     "outlook.com",
     "docs.google.com",
     "youtube.com",
+    "pdsb.net",
+    "peelsb.com"
   ];
 
   /**
@@ -37,9 +39,7 @@ export class SubscriptionListService {
    * @constructor
    * @param { SubscriptionService } _newSub - Handles generation of new SubscriptionData objects
    */
-  constructor(
-    private _newSub: SubscriptionService,
-  ) {}
+  constructor(private _newSub: SubscriptionService) {}
 
   /**
    * Performs various sorting and searching algorithms on ~5 MB of Email data, measures timings to complete.
@@ -94,30 +94,6 @@ export class SubscriptionListService {
   */
 
   /**
-   * Initiates Google Auth Service to access Google Drive API
-   */
-  initClient() {
-    return new Promise((resolve, reject) => {
-      gapi.load("client:auth2", () => {
-        return gapi.client
-          .init({
-            apiKey: "AIzaSyD8YHcpEJKBFnrTt4DXftDVdsOw9XGYLrg",
-            clientId:
-              "934426938633-6t4rnqdo9n7epqdgjb5hkptvs532upl1.apps.googleusercontent.com",
-            discoveryDocs: [
-              "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest",
-            ],
-            scope: "https://www.googleapis.com/auth/drive.file",
-          })
-          .then(() => {
-            this.googleAuth = gapi.auth2.getAuthInstance();
-            resolve();
-          });
-      });
-    });
-  }
-
-  /**
    * Locates the fileId of emails
    * @param { CredentialData } token: Access token to invoke Drive API
    */
@@ -157,10 +133,11 @@ export class SubscriptionListService {
 
 
   /**
- * Checks if data resource has been uploaded
- */
+    * Checks if data resource has been uploaded
+    * @returns { boolean } - Returns true if data source has been uploaded, else returns false
+  */
   isDataUploaded() {
-    let status: Boolean;
+    let status: boolean;
     //Call external function to check whether an upload has occured
     if (this.dataSrc == null) {
       status = false;
@@ -181,7 +158,7 @@ export class SubscriptionListService {
 
     for (let email of this.emailPack) {
       let index = email.search("From: ");
-      let serviceName: String = email
+      let serviceName: string = email
         .slice(
           index + "From: ".length,
           index + email.slice(index, index + 1000).search("\n")
@@ -189,7 +166,7 @@ export class SubscriptionListService {
         .trim();
 
       if (serviceName.search(">") != -1) {
-        let address: String = "";
+        let address: string = "";
         let myArray = [];
         let firstDot = false;
         for (let i = serviceName.search(">") - 1; i >= 0; i--) {
@@ -206,7 +183,7 @@ export class SubscriptionListService {
         let name = address.slice(0, address.search(/\./));
 
         if (this.subscriptions == { } || (Object.keys(this.subscriptions).indexOf(name) == -1 && this.avoidAddresses.indexOf(address) == -1)) {
-          await this._newSub.searchForCompany(address);
+          await this._newSub.searchForCompany(name, address);
           let newSubData = new SubscriptionData;
           newSubData = JSON.parse(JSON.stringify(this._newSub.getData()));
           this._newSub.clearData();
@@ -223,9 +200,10 @@ export class SubscriptionListService {
 
   /**
    * Prints out list of subscriptions to console
+   * @returns { Array<SubscriptionData> } - returns an array of all subscriptions
    */
   printSubscriptionData() {
-    return this.subscriptions;
+    return Object.values(this.subscriptions);
   }
 
   /**
@@ -262,11 +240,11 @@ export class SubscriptionListService {
 
   /**
    * Returns a specified subscription on subscriptions array
-   * @param { Number } id - Index on array this.subscriptions of the target subscription
-   * @returns { SubscriptionService } Returns a subscription object
+   * @param { string } service - Name of target subscription
+   * @returns { SubscriptionData } Returns a subscription object
    */
-  getSubscription(id) {
-    return this.subscriptions[id];
+  getSubscription(service: string) {
+    return this.subscriptions[service];
   }
 
   /**

@@ -24,7 +24,7 @@ export class DashboardPageComponent implements OnInit {
   constructor(private _subscriptionList: SubscriptionListService, private _PIPEDAList: PIPEDAListService, private _login: LoginService) {}
 
   /**
-   * Loads any scripts needed for Dashboard Page
+   * Loads google client for Google Drive API
    */
   ngOnInit(): void {
     this._login.initGoogleClient();
@@ -47,11 +47,11 @@ export class DashboardPageComponent implements OnInit {
 
   /**
    * Adds a given subscription to the list of PIPEDA requests
-   * @param { Number } id - Index of the particular subscription on sublist
-   * @param { String } type - Is this a retrieval or deletion request?
+   * @param { string } name - Name of the particular subscription on sublist
+   * @param { string } type - Is this a retrieval or deletion request?
    */
-  addToPIPEDAList(id: Number, type: String) {
-    this._PIPEDAList.add(this._subscriptionList.getSubscription(id), type)
+  addToPIPEDAList(name: string, type: String) {
+    this._PIPEDAList.add(this._subscriptionList.getSubscription(name), type)
   }
 
   /**
@@ -77,15 +77,18 @@ export class DashboardPageComponent implements OnInit {
 
   /**
    * Returns subscription data associated with email
-   * @returns {Array<any>} - Returns an array where 1st element is an array of subscription names, 2nd is object containing SubscriptionData objects associated with names
+   * @returns { } - Returns an array where 1st element is an array of subscription names, 2nd is object containing SubscriptionData objects associated with names
    */
   getSubList() {
-    let data = this._subscriptionList.printSubscriptionData();
-    //Array of names, SubscriptionData object
-    return [Object.keys(data), data];
+    return this._subscriptionList.printSubscriptionData();
   }
 
-  textResize(word:string) {
+  /**
+   * Takes in a word and resizes it to fit inside the subscription box in the DOM
+   * @param { string } word - Word to resize
+   * @returns { Array<string> } - Two element array: element 1: size of word in pixels, element 2: distance from bottom of subscription box in px
+   */
+  textResize(word: string) {
     if (word == null) {
       return ['1px', '1px'];
     }

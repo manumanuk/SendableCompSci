@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SubscriptionService } from './subscription.service';
+import { SubscriptionData } from './prototypes/subscription-data-interface';
 
 @Injectable({
   providedIn: "root",
@@ -21,10 +21,10 @@ export class PIPEDAListService {
 
   /**
    *
-   * @param { SubscriptionService } subscription - the subscription being added to the PIPEDA list
-   * @param { String } type - the type of request to be sent (retrieval or deletion)
+   * @param { SubscriptionData } subscription - the subscription being added to the PIPEDA list
+   * @param { string } type - the type of request to be sent (retrieval or deletion)
    */
-  add(subscription: SubscriptionService, type: String) {
+  add(subscription: SubscriptionData, type: string) {
     if (type == "retrieval") {
       this.retrievalList.push(subscription);
     } else {

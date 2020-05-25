@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { SubscriptionData } from './prototypes/subscription-data-interface'
 import { AngularFireDatabase, AngularFireList } from '@angular/fire/database'
 import { HttpClient } from '@angular/common/http'
-import { CrawlData } from '../services/prototypes/crawl-data'
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +20,7 @@ export class SubscriptionService {
    * Creates SubscriptionService class
    * @constructor
    * @param { AngularFireDatabase } _database - Creates private object of type AngularFireDatabase
+   * @param { HttpClient } _http - Object to handle HTTP requests
    */
   constructor(private _database: AngularFireDatabase, private _http: HttpClient) {
     this.databaseRef = _database.list(this.databasePath);
@@ -31,12 +31,10 @@ export class SubscriptionService {
 
   /**
    * Searches existing database to find company's privacy policy and privacy email
-   * @param { String } service - Name of company to search for
+   * @param { string } service - Name of company to search for
    * @returns { number } - Returns -1 if company name is not in database, else returns 0
    */
-  private readDatabase(service: String) {
-    //Check first to see if company name is already in the database
-    //DATABASE FILE READING
+  private readDatabase(service: string) {
     for (let key of this.dbRead) {
       if (key.name == service) {
         this.subscriptionData=key;
@@ -48,13 +46,40 @@ export class SubscriptionService {
 
   /**
    * Crawls web for privacy policy and email information
-   * @param { String } - service - Name of company to search for
+   * @param { string } name - Name of company to search for
+   * @param { string } url - Url of company website
    */
-  private crawlWeb(service: String) {
-    return this._http.post<Array<CrawlData>>("http://localhost:5001/sendablecompsci/us-central1/scraper", JSON.stringify({ text: "https://" + service }));
-    //DATABASE FILE WRITING
-    //Add information to database of available companies
-    //this.databaseRef.push(this.subscriptionData)
+  private async crawlWeb(name: string, url: string) {
+    let response = await this._http.post<Array<SubscriptionData>>("http://localhost:5001/sendablecompsci/us-central1/scraper", JSON.stringify({ text: "https://" + url }))
+    .toPromise<Array<SubscriptionData>>().catch(rej => {
+      console.log(rej);
+      this.subscriptionData = new SubscriptionData();
+      this.subscriptionData.name = name;
+      this.subscriptionData.url = url;
+      this.databaseRef.push(this.subscriptionData);
+      return;
+    });
+    if (response != null) {
+      let data = response[0];
+      if (data.logoSrc == null) {
+        this.subscriptionData.logoSrc = '../../assets/images/question-mark-icon.PNG';
+      } else if (data.logoSrc.startsWith('https://')) {
+        this.subscriptionData.logoSrc = data.logoSrc;
+      } else if (data.logoSrc.startsWith("//")) {
+        this.subscriptionData.logoSrc = "https:" + data.logoSrc;
+      } else if (data.logoSrc.startsWith('/')) {
+        this.subscriptionData.logoSrc = data.url + data.logoSrc;
+      } else {
+        this.subscriptionData.logoSrc = data.url + '/' + data.logoSrc;
+      }
+      this.databaseRef.push(this.subscriptionData);
+    } else {
+      this.subscriptionData = new SubscriptionData();
+      this.subscriptionData.name = name;
+      this.subscriptionData.url = url;
+      this.databaseRef.push(this.subscriptionData);
+    }
+    return;
   }
 
   /**
@@ -75,33 +100,17 @@ export class SubscriptionService {
 
   /**
    * Searches for a given company name in database or crawls web
-   * @param { String } service - Name of company to search for
+   * @param { string } name - Name of company to search for
+   * @param { string } url - Url of company website
    */
-  async searchForCompany (service: String) {
-    if (this.readDatabase(service) != -1) {
+  async searchForCompany (name: string, url: string) {
+    this.subscriptionData = new SubscriptionData();
+    this.subscriptionData.name = name;
+    this.subscriptionData.url = url;
+    if (this.readDatabase(name) != -1) {
       return;
     } else {
-      this.subscriptionData.name = service;
-      this.subscriptionData.emailFrequency = 1;
-      let myVar = await this.crawlWeb(service).toPromise<Array<CrawlData>>();
-      if (myVar != null) {
-        let data: CrawlData = myVar[0];
-        if (data.favicon == null) {
-          this.subscriptionData.logoSrc = '../../assets/images/question-mark-icon.PNG';
-        } else if (data.favicon.startsWith('https://')) {
-          this.subscriptionData.logoSrc = data.favicon;
-        } else if (data.favicon.startsWith("//")) {
-          this.subscriptionData.logoSrc = "https:" + data.favicon;
-        }else if (data.favicon.startsWith('/')) {
-          this.subscriptionData.logoSrc = data.url + data.favicon;
-        } else {
-          this.subscriptionData.logoSrc = data.url + '/' + data.favicon;
-        }
-        this.databaseRef.push(this.subscriptionData);
-      } else {
-        this.subscriptionData.logoSrc="../../assets/images/question-mark-icon.PNG"
-      }
-      return;
+      await this.crawlWeb(name, url);
     }
   }
 }

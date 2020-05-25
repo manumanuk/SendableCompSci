@@ -3,15 +3,23 @@
  * @class SubscriptionData
  */
 export class SubscriptionData {
-  name: String;
+  name: string;
   emailFrequency: number;
-  pipAddress: String;
-  logoSrc: String;
-  deleteAccountURL: String;
+  pipAddress: string;
+  logoSrc: string;
+  deleteAccountURL: string;
+  url: string;
+
+  /**
+   * Initializes all variables with defaults
+   * @constructor
+   */
   constructor() {
     this.name = "";
-    this.emailFrequency = 0;
+    this.emailFrequency = 1;
     this.pipAddress = "";
-    this.logoSrc = "";
+    this.logoSrc = "/assets/images/question-mark-icon.PNG";
+    this.deleteAccountURL = "";
+    this.url = "";
   }
 }
