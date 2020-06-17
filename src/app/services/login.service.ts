@@ -77,8 +77,8 @@ export class LoginService {
    * Checks if user is logged in
    * @returns { Boolean } status - Returns state of login (true if logged in, false if logged out)
    */
-  isLoggedIn() : Boolean {
-    let status: Boolean;
+  isLoggedIn() : boolean {
+    let status: boolean;
     if (this.userDetails == null) {
       status = false;
     } else {
@@ -88,7 +88,7 @@ export class LoginService {
   }
   /**
    * Creates an Object to hold user's name, email, and profile picture
-   * @returns { Object } myData - Returns user's name, email, and profile picture
+   * @returns { firebase.User } - Returns user's biographical information
    */
   getUserData() {
     return this.userDetails;

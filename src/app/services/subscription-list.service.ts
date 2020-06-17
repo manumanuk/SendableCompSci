@@ -19,7 +19,6 @@ export class SubscriptionListService {
   private subscriptions:{[name:string]:SubscriptionData} = { }; //Array of SubscriptionData Objects attached to names
   private emailData: string = null;
   private emailPack: Array<string> = [];
-  public googleAuth: gapi.auth2.GoogleAuth;
   private avoidAddresses: Array<String> = [
     "google.com",
     "gmail.com",
@@ -98,7 +97,8 @@ export class SubscriptionListService {
    * @param { CredentialData } token: Access token to invoke Drive API
    */
   searchForTestFile(token:CredentialData) {
-    gapi.auth.setToken({access_token: token.credential.accessToken});
+    let googleToken: any = token.credential.toJSON();
+    gapi.auth.setToken({ access_token: googleToken.oauthAccessToken, error: "The login was unsuccessful.", expires_in: '', state: 'https://www.googleapis.com/auth/drive.file, https://www.googleapis.com/auth/drive.readonly'});
     gapi.client.drive.files.list({
       q:"name='TestFile.mbox'",
       pageSize: 1000,
@@ -108,7 +108,8 @@ export class SubscriptionListService {
       this.setUploadSrc(files[0].id);
     },
     (err) => {
-      console.log('The API returned an error: ' + err);
+      console.log('The API returned an error: ')
+      console.log(err);
       return
     });
   }

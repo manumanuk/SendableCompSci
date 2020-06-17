@@ -23,6 +23,11 @@ export class DashboardPageComponent implements OnInit {
    */
   constructor(private _subscriptionList: SubscriptionListService, private _PIPEDAList: PIPEDAListService, private _login: LoginService) {}
 
+  public pressed = false;
+
+  public buttonColor = this.pressed ? '#1db5a3' : '#f3f3f3';
+  public textColor = this.pressed ? 'white' : 'black';
+
   /**
    * Loads google client for Google Drive API
    */
@@ -39,7 +44,7 @@ export class DashboardPageComponent implements OnInit {
 
   /**
    * Checks whether email data has been uploaded
-   * @returns { Boolean } Returns true if data has been uploaded, false if it hasn't
+   * @returns { boolean } Returns true if data has been uploaded, false if it hasn't
    */
   isEmailUploaded() {
     return this._subscriptionList.isDataUploaded();
@@ -50,7 +55,7 @@ export class DashboardPageComponent implements OnInit {
    * @param { string } name - Name of the particular subscription on sublist
    * @param { string } type - Is this a retrieval or deletion request?
    */
-  addToPIPEDAList(name: string, type: String) {
+  addToPIPEDAList(name: string, type: string) {
     this._PIPEDAList.add(this._subscriptionList.getSubscription(name), type)
   }
 
@@ -77,7 +82,7 @@ export class DashboardPageComponent implements OnInit {
 
   /**
    * Returns subscription data associated with email
-   * @returns { } - Returns an array where 1st element is an array of subscription names, 2nd is object containing SubscriptionData objects associated with names
+   * @returns { Array<SubscriptionData> } - Returns an array of SubscriptionData objects
    */
   getSubList() {
     return this._subscriptionList.printSubscriptionData();

@@ -17,9 +17,8 @@ export class LoginPageComponent implements OnInit {
    * Creates LoginPageComponent class and loads backend for login
    * @constructor
    * @param { LoginService } _loginService - Connects page view to backend tools for handling login events
-   * @param { Router } _router - Object imported from Angular Router library, responsible for pageview navigation
    */
-  constructor(private _loginService: LoginService, private _router: Router) {}
+  constructor(private _loginService: LoginService) {}
 
   /**
    * When login page is loaded, checks if user has already logged in

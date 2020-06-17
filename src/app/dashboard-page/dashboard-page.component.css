@@ -17,6 +17,18 @@
   font-size: 20px;
   box-sizing: border-box;
 }
+#pip-button {
+  font-size: 14px;
+  font-weight: 500;
+  padding: 5px;
+  margin: 2px auto;
+  height: 36px;
+  width: 90px;
+  border-radius: 6px;
+  bottom: 15px;
+  position: relative;
+  display: block;
+}
 #aboutLink {
   padding: 10px 0px;
 }
@@ -107,3 +119,12 @@
   display: inline-block;
   border: 0.5px solid black;
 }
+#list-delete-button {
+  margin: 0 auto;
+  padding: 10px;
+  font-size: 15px;
+  border-radius: 7px;
+  bottom: 35px;
+  position: relative;
+}
+

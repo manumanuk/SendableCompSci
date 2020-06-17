@@ -72,6 +72,7 @@ export class SubscriptionService {
       } else {
         this.subscriptionData.logoSrc = data.url + '/' + data.logoSrc;
       }
+      this.subscriptionData.pipAddress = data.pipAddress;
       this.databaseRef.push(this.subscriptionData);
     } else {
       this.subscriptionData = new SubscriptionData();

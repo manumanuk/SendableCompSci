@@ -1,4 +1,5 @@
 <main style="display: inline-block;">
+  <!--COMMENT THIS DIV OUT UP TO NG-TEMPLATE #SUBLISTVIEW-->
   <div *ngIf="!isEmailUploaded(); then uploadView; else subListView"></div>
 
     <ng-template #uploadView>
@@ -47,6 +48,7 @@
           </div>
         </div>
 
+        <!--COMMENT THIS DIV OUT-->
         <div id="subscriptions-list">
           <div style="height:7px;"></div>
           <div *ngFor="let subscription of getSubList()">
@@ -58,9 +60,25 @@
               </div>
 
               <div style="display:inline-block;">
-                <h1 class="header-text" style="display: inline; font-size: 25px; margin: 0px 10px; bottom: 15px; position:relative;">Email Frequency
+                <h1 class="header-text" style="display: inline; font-size: 25px; margin: 0px 10px; bottom: 23px; position:relative;">Email Frequency
                 </h1>
                 <h1 class="header-text" style="padding:0px; font-size: 60px; bottom: 20px; position: relative;">{{ subscription.emailFrequency }}</h1>
+              </div>
+
+              <div *ngIf="subscription.pipAddress!=''" style="display:inline-block;">
+                <h1 class="header-text" style="display: inline; font-size: 25px; margin: 0px 10px; bottom: 15px; position:relative;">
+                  PIPEDA
+                </h1>
+                <button [ngStyle]="{ backgroundColor: buttonColor, color: textColor }" class="blue-button dash-button" id="pip-button">☑
+                  Retrieve</button>
+                <button class="blue-button dash-button" id="pip-button">☐ Delete</button>
+                </div>
+
+              <div style="display:inline-block;">
+                <h1 class="header-text" style="display: inline; font-size: 19px; margin: 0px 10px; bottom: 55px; position:relative;">
+                    Delete Account
+                </h1>
+                <button class="brown-button dash-button" id="list-delete-button">Delete Account</button>
               </div>
             </div>
           </div>
@@ -72,18 +90,30 @@
             <div class="dashboard-container" id="subscription-list-item">
               <div style="display: inline-block;">
                 <img id="company-logo" src="../../assets/images/question-mark-icon.PNG">
-                <h1 [ngStyle]="{'font-size': textResize(this.name)[0], 'bottom': textResize(this.name)[1]}" id="company-name" >{{name}}</h1>
+                <h1 id="company-name" >Hello</h1>
                 <div class="line" style="height: 90px; bottom: 5px; position: relative;"></div>
               </div>
               <div style="display:inline-block;">
-                <h1 class="header-text" style="display: inline; font-size: 25px; margin: 0px 10px; bottom: 15px; position:relative;">Email Frequency</h1>
+                <h1 class="header-text" style="display: inline; font-size: 25px; margin: 0px 10px; bottom: 22px; position:relative;">Email Frequency</h1>
                 <h1 class="header-text" style="padding:0px; font-size: 60px; bottom: 20px; position: relative;">15</h1>
+              </div>
+              <div style="display:inline-block;">
+                <h1 class="header-text" style="display: inline; font-size: 25px; margin: 0px 10px; bottom: 15px; position:relative;">PIPEDA
+                </h1>
+                <button [ngStyle]="{ backgroundColor: buttonColor, color: textColor }" class="blue-button dash-button" id="pip-button">☑ Retrieve</button>
+                <button class="blue-button dash-button" id="pip-button">☐ Delete</button>
+              </div>
+              <div style="display:inline-block;">
+                <h1 class="header-text" style="display: inline; font-size: 19px; margin: 0px 10px; bottom: 55px; position:relative;">Delete Account
+                </h1>
+                <button class="brown-button dash-button" id="list-delete-button">Delete Account</button>
               </div>
             </div>
           </div>
         </div>-->
 
       </div>
+    <!--COMMENT THIS OUT-->
     </ng-template>
 
 
