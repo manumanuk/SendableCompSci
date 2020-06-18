@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 const functions = require('firebase-functions');
 const cors = require('cors')({origin:true});
 
@@ -5,8 +6,8 @@ const cheerio = require("cheerio");
 const getUrls = require("get-urls");
 const fetch = require("node-fetch");
 
-const linkKeywords = ['about', 'contact', 'terms', 'service', 'privacy', 'legal', 'policy', 'learn', 'support', 'email', 'faq', 'frequently', 'questions', 'question', 'asked', 'polic', 'account', 'delete', 'disable', 'deactivate', 'help'];
-const emailKeywords = ['privacy', 'support', 'contact', 'hr', 'help', 'hello', 'policy', 'info'];
+const linkKeywords = ['contact', 'service', 'privacy', 'legal', 'policy', 'faq', 'policies', 'account', 'delete', 'disable', 'deactivate', 'help'];
+const emailKeywords = ['privacy', 'support', 'contact', 'help', 'hello', 'policy', 'info'];
 const deletePageKeywords = ['delete', 'deactivate', 'disable'];
 
 function timeout(ms, promise) {
@@ -28,6 +29,74 @@ function interpretLink(link, homeSite) {
     link = homeSite + link;
   }
   return link;
+}
+
+/**
+ * Given an HTML page url, find potential email links and "delete account" pages
+ * @param {  } $ - URL of page to search for
+ */
+async function analyzePage(url, text, homeSite) {
+  const res = await timeout(1000, fetch(url)).catch(e => {
+    console.log(e);
+    return null;
+  });
+  if (res === null) {
+    return null;
+  }
+  const html = await res.text().catch(e => {
+    console.log(e);
+    return null;
+  });
+
+  const $ = cheerio.load(html, {
+    withDomLvl1: true,
+    normalizeWhitespace: false,
+    xmlMode: false,
+    decodeEntities: true
+  });
+
+  var links = [];
+  var linksToInvestigate = [];
+  var pipCandidates = [];
+  $('*').find("a").each((i, e) => {
+    var newLink = interpretLink($(e).attr('href'), homeSite);
+    if (newLink !== undefined && newLink !== null && newLink.toLowerCase().startsWith('mailto:')) {
+      var pipAddressCandidate = newLink.slice(7);
+      if (pipAddressCandidate.indexOf('?') !== -1) {
+        pipAddressCandidate = pipAddressCandidate.slice(0, pipAddressCandidate.indexOf('?'));
+      }
+      pipCandidates.push(pipAddressCandidate);
+    } else if (newLink !== undefined && newLink !== null && links.indexOf(newLink) === -1 && newLink.indexOf(text.slice(8)) !== -1) {
+      links[i] = newLink;
+    }
+  });
+  for (link of links) {
+    if (link === undefined || link === null) {
+      continue;
+    }
+    for (keyword of linkKeywords) {
+      if (link.toLowerCase().indexOf(keyword) !== -1) {
+        linksToInvestigate.push(link);
+      }
+    }
+  }
+
+  var deletePage = false;
+  var title = $('title').first().text();
+  for (keyword of deletePageKeywords) {
+    if (title.indexOf(keyword) !== -1) {
+      deletePage = true;
+    }
+  }
+
+
+  return {
+    title: title,
+    urlsToInvestigate: linksToInvestigate,
+    deleteAccountPage: deletePage,
+    pipCandidates: pipCandidates,
+    url: url
+  };
 }
 
 /**
@@ -63,6 +132,7 @@ const scrapeMetatags = (text) => {
     if (imageSrc === undefined) {
       imageSrc=$('link[rel="SHORTCUT ICON"]').attr('href');
     }
+
     var links = [];
     var linksToInvestigate = [];
     var pipCandidates = [];
@@ -88,6 +158,71 @@ const scrapeMetatags = (text) => {
         }
       }
     }
+
+    let temp = [];
+    let visitedLinks = [];
+    for (link of linksToInvestigate) {
+      visitedLinks.push(link);
+      var data = await analyzePage(link, text, url);
+      if (data === null) {
+        continue;
+      }
+      for (site of data.urlsToInvestigate) {
+        if (temp.indexOf(site) === -1 && visitedLinks.indexOf(site) === -1 ) {
+          temp.push(site);
+        }
+      }
+      for (site of data.pipCandidates) {
+        if (pipCandidates.indexOf(site)===-1) {
+          pipCandidates.push(site);
+        }
+      }
+      if (data.deleteAccountPage) {
+        deleteAccountUrl = data.url;
+      }
+    }
+    linksToInvestigate = temp;
+
+    temp = [];
+    for (link of linksToInvestigate) {
+      visitedLinks.push(link);
+      var pageInfo = await analyzePage(link, text, url);
+      if (pageInfo === null) {
+        continue;
+      }
+      for (site of pageInfo.urlsToInvestigate && visitedLinks.indexOf(site) === -1) {
+        if (temp.indexOf(site)===-1) {
+          temp.push(site);
+        }
+      }
+      for (site of pageInfo.pipCandidates) {
+        if (pipCandidates.indexOf(site) === -1) {
+          pipCandidates.push(site);
+        }
+      }
+      if (pageInfo.deleteAccountPage) {
+        deleteAccountUrl = pageInfo.url;
+      }
+    }
+    linksToInvestigate = temp;
+
+    if (linksToInvestigate !== [] && visitedLinks !== []) {
+      for (page of linksToInvestigate) {
+        for (keyword of deletePageKeywords) {
+          if (page.indexOf(keyword) !== -1) {
+            deleteAccountUrl = page;
+          }
+        }
+      }
+      for (page of visitedLinks) {
+        for (keyword of deletePageKeywords) {
+          if (page.indexOf(keyword) !== -1) {
+            deleteAccountUrl = page;
+          }
+        }
+      }
+    }
+
     if (pipCandidates.length > 0) {
       for (candidate of pipCandidates) {
         for (keyword of emailKeywords) {
@@ -104,9 +239,6 @@ const scrapeMetatags = (text) => {
         pipAddress = pipCandidates.pop();
       }
     }
-    for (link of linksToInvestigate) {
-      //
-    }
 
     return {
       url,
@@ -114,7 +246,7 @@ const scrapeMetatags = (text) => {
       logoSrc: imageSrc,
       pipAddress: pipAddress,
       deleteAccountUrl: deleteAccountUrl,
-      links
+      //links
     }
   });
 

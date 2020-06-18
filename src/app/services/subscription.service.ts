@@ -114,4 +114,10 @@ export class SubscriptionService {
       await this.crawlWeb(name, url);
     }
   }
+  finalUpdate() {
+    let testData = new SubscriptionData();
+    testData.name = "update";
+    let key = this.databaseRef.push(testData).key;
+    this._database.object('/companies/' + key).remove();
+  }
 }

@@ -195,7 +195,7 @@ export class SubscriptionListService {
       }
     }
 
-    console.log(this.subscriptions);
+    this._newSub.finalUpdate();
 
   }
 

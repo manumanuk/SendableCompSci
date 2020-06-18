@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SubscriptionListService } from '../services/subscription-list.service';
 import { PIPEDAListService } from '../services/pipedalist.service';
 import { LoginService } from '../services/login.service';
+import { SubscriptionData } from '../services/prototypes/subscription-data-interface';
 
 @Component({
   selector: "app-dashboard-page",
@@ -55,15 +56,16 @@ export class DashboardPageComponent implements OnInit {
    * @param { string } name - Name of the particular subscription on sublist
    * @param { string } type - Is this a retrieval or deletion request?
    */
-  addToPIPEDAList(name: string, type: string) {
-    this._PIPEDAList.add(this._subscriptionList.getSubscription(name), type)
+  addToPIPEDAList(subscription: SubscriptionData, type: string) {
+    this._PIPEDAList.add(subscription, type)
   }
 
   /**
    * Initiates a mailto request using pipedalist object
+   * @param { string } type - "deletion" or "retrieval" type
    */
-  sendMailTo() {
-    this._PIPEDAList.send();
+  sendMailTo(type: string) {
+    return this._PIPEDAList.send(type, this._login.getUserData().email);
   }
 
   /**
@@ -115,5 +117,31 @@ export class DashboardPageComponent implements OnInit {
     if (fontSize > 80)
       fontSize = 80;
     return [fontSize + 'px', 20+(80-fontSize)*0.3 + 'px'];
+  }
+
+  getPIPEDAState(subscription: SubscriptionData) {
+    let state = this._PIPEDAList.subState(subscription);
+    if (state == "retrieval") {
+      return {
+        retrievalBox: "☑",
+        deletionBox: "☐",
+        retrievalColorBGC: ['#1db5a3', 'white'],
+        deletionColorBGC: ['#f3f3f3', 'black']
+      }
+    } else if (state == "deletion") {
+      return {
+        retrievalBox: "☐",
+        deletionBox: "☑",
+        retrievalColorBGC: ['#f3f3f3', 'black'],
+        deletionColorBGC: ['#1db5a3', 'white']
+      }
+    } else {
+      return {
+        retrievalBox: "☐",
+        deletionBox: "☐",
+        retrievalColorBGC: ['#f3f3f3', 'black'],
+        deletionColorBGC: ['#f3f3f3', 'black']
+      }
+    }
   }
 }

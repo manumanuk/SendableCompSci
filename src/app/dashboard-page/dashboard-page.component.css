@@ -127,4 +127,9 @@
   bottom: 35px;
   position: relative;
 }
-
+a:hover {
+  color: gray;
+}
+a {
+  text-decoration: none;
+}
