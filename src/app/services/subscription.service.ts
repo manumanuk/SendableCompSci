@@ -56,7 +56,7 @@ export class SubscriptionService {
       this.subscriptionData = new SubscriptionData();
       this.subscriptionData.name = name;
       this.subscriptionData.url = url;
-      this.databaseRef.push(this.subscriptionData);
+      //this.databaseRef.push(this.subscriptionData);
       return;
     });
     if (response != null) {
@@ -78,7 +78,7 @@ export class SubscriptionService {
       this.subscriptionData = new SubscriptionData();
       this.subscriptionData.name = name;
       this.subscriptionData.url = url;
-      this.databaseRef.push(this.subscriptionData);
+      //this.databaseRef.push(this.subscriptionData);
     }
     return;
   }

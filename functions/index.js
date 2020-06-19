@@ -1,3 +1,5 @@
+/* eslint-disable prefer-arrow-callback */
+/* eslint-disable promise/catch-or-return */
 /* eslint-disable no-await-in-loop */
 const functions = require('firebase-functions');
 const cors = require('cors')({origin:true});
@@ -183,7 +185,7 @@ const scrapeMetatags = (text) => {
     }
     linksToInvestigate = temp;
 
-    temp = [];
+    /*temp = [];
     for (link of linksToInvestigate) {
       visitedLinks.push(link);
       var pageInfo = await analyzePage(link, text, url);
@@ -222,7 +224,7 @@ const scrapeMetatags = (text) => {
         }
       }
     }
-
+    */
     if (pipCandidates.length > 0) {
       for (candidate of pipCandidates) {
         for (keyword of emailKeywords) {

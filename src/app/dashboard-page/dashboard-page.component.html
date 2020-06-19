@@ -16,7 +16,7 @@
 
         <div class="dashboard-container" style="width: 660px; height: 130px;">
           <h1 class="header-text" style="width: 410px; padding: 25px 0px; display: inline-block;">Download the PIPEDA request template.</h1>
-          <button class="dash-button brown-button" style="display: inline-block; margin: 25px; position: relative; bottom: 20px;" (click)="downloadPIPEDATemplate()">Download</button>
+          <a href="../../assets/PIPEDATemplate.txt" download="PIPEDATemplate.txt"><button class="dash-button brown-button" style="display: inline-block; margin: 25px; position: relative; bottom: 20px;" (click)="downloadPIPEDATemplate()">Download</button></a>
 
         </div>
       </div>
@@ -50,6 +50,12 @@
 
         <!--COMMENT THIS DIV OUT-->
         <div id="subscriptions-list">
+          <div *ngIf="getLoadingScreenText()!='Scanning emails & scraping the web...'" style="width:100%; height: 500px;">
+              <h1 class="header-text" style="display: inline-box; padding: 200px 0px; margin: 0 auto;">
+              <mat-progress-spinner style="display: inline-block;"*ngIf="getLoadingScreenText()!='There was an error loading your data.'"
+                              mode="indeterminate" color="primary" diameter="25"></mat-progress-spinner>
+              {{getLoadingScreenText()}}</h1>
+          </div>
           <div style="height:7px;"></div>
           <div *ngFor="let subscription of getSubList()">
             <div class="dashboard-container" id="subscription-list-item">

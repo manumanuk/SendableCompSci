@@ -32,6 +32,7 @@ export class SubscriptionListService {
     "pdsb.net",
     "peelsb.com"
   ];
+  private loadStatus: string = "Loading...";
 
   /**
    * Creates Subscripton List class
@@ -97,21 +98,29 @@ export class SubscriptionListService {
    * @param { CredentialData } token: Access token to invoke Drive API
    */
   searchForTestFile(token:CredentialData) {
+    this.loadStatus = "Connecting to Google Drive..."
     let googleToken: any = token.credential.toJSON();
     gapi.auth.setToken({ access_token: googleToken.oauthAccessToken, error: "The login was unsuccessful.", expires_in: '', state: 'https://www.googleapis.com/auth/drive.file, https://www.googleapis.com/auth/drive.readonly'});
+    this.loadStatus = "Searching for Scan Data..."
     gapi.client.drive.files.list({
       q:"name='TestFile.mbox'",
       pageSize: 1000,
       fields: 'nextPageToken, files(id, name)',
     }).then((res) => {
+      this.loadStatus = "Found your email data!";
       const files = res.result.files;
       this.setUploadSrc(files[0].id);
     },
     (err) => {
+      this.loadStatus = "Could not find your email data.";
       console.log('The API returned an error: ')
       console.log(err);
       return
     });
+  }
+
+  getLoadState () {
+    return this.loadStatus;
   }
 
   /**
@@ -121,11 +130,19 @@ export class SubscriptionListService {
   private setUploadSrc(fileId:string) {
     // Get email data: FILE READ
     this.dataSrc=fileId;
+    this.loadStatus = "Fetching your file data..."
     let request = gapi.client.drive.files.get({
       'fileId': fileId,
       alt:'media'
     }).then(res=>{
       this.emailData = res.body;
+      if (this.emailData == "" || this.emailData == null || this.emailData == undefined) {
+        this.loadStatus = "There was an error loading your data.";
+        return;
+      } else {
+        this.loadStatus = "Retrieved your email data from the file.";
+      }
+      console.log("beginning scan");
       this.scanEmail();
     }, err => {
       console.error("An error occurred fetching the email data file: " + err)
@@ -156,8 +173,10 @@ export class SubscriptionListService {
     this.splitMail();
 
     //this.sortAndSearchTest();
+    this.loadStatus = "Scanning emails & scraping the web...";
 
     for (let email of this.emailPack) {
+      console.log('searching an email');
       let index = email.search("From: ");
       let serviceName: string = email
         .slice(
@@ -211,7 +230,10 @@ export class SubscriptionListService {
    * Splits given email data string into array of emails
    */
   private splitMail(): void {
+    this.loadStatus = "Interpreting mbox file as emails...";
+    console.log("splitting emails now");
     let emailLines: Array<string> = this.emailData.split("\n");
+    console.log("done");
     let newMail = "";
     let emailCount = 0;
     for (let i = 0; i < emailLines.length; i++) {
@@ -227,6 +249,7 @@ export class SubscriptionListService {
               (emailLines[i].length + emailLines[i - 1].length) +
               1
           );
+          console.log("email found");
           this.emailPack.push(newMail);
           newMail = newMail = emailLines[i - 1].trim();
           newMail = newMail.concat("\n" + emailLines[i].trim());
@@ -236,6 +259,7 @@ export class SubscriptionListService {
         newMail = newMail.concat("\n" + emailLines[i].trim());
       }
     }
+    console.log(this.emailPack.length + "emails found");
     emailCount += 1;
   }
 
@@ -251,8 +275,12 @@ export class SubscriptionListService {
   /**
    * Downloads PIPEDA email template to user desktop
    */
-  downloadTemplate() {
+  async downloadTemplate() {
     //Initiate download
+    /*await this._newSub.searchForCompany("snapchat", "snapchat.com");
+    await this._newSub.searchForCompany("tiktok", "tiktok.com");
+    await this._newSub.searchForCompany("facebook", "facebook.com");
+    await this._newSub.searchForCompany("twitter", "twitter.com");*/
   }
 }
 

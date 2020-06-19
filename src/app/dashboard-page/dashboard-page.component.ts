@@ -144,4 +144,8 @@ export class DashboardPageComponent implements OnInit {
       }
     }
   }
+
+  getLoadingScreenText() {
+    return this._subscriptionList.getLoadState();
+  }
 }

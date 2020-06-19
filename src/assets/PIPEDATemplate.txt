@@ -1,0 +1,39 @@
+PIPEDA RETRIEVAL REQUEST TEMPLATE:
+
+From: [YOUR EMAIL HERE]
+To: [PRIVACY@SAMPLECOMPANY.COM]
+
+Subject: PIPEDA Retrieval Request
+
+Body:
+
+To whom it may concern,
+
+Under section 4.9 of Schedule 1 of Canada’s federal privacy legislation — The Personal Information Protection and Electronic Documents Act — I am requesting a copy of the personal information which you hold associated with my account. For information on what I require from you, please see https://www.priv.gc.ca/en/privacy-topics/accessing-personal-information/api_bus/.
+
+In general, PIPEDA requires organizations to provide individuals with access to their personal information at free or minimal cost within 30 days. For details about organizations' responsibilities under PIPEDA's access provision see the Office of the Privacy Commissioner's guidance at priv.gc.ca: What businesses need to know.
+
+If you do not normally handle these types of requests, please forward this letter to the person in your organization responsible for privacy compliance.
+
+Please contact me at [YOUR EMAIL HERE] if you require additional information from me before you proceed.
+
+
+_____________________________________________________________________________________________________________
+
+PIPEDA DELETION REQUEST TEMPLATE:
+
+From: [YOUR EMAIL HERE]
+To: [PRIVACY@SAMPLECOMPANY.COM]
+
+Subject: PIPEDA Retrieval Request
+
+Body:
+To whom it may concern,
+
+Under section 4.3.9 of Schedule 1 of Canada’s federal privacy legislation — The Personal Information Protection and Electronic Documents Act (PIPEDA) — I am withdrawing my consent for you to collect, use, or disclose my personal information, requesting the deletion of my account. In accordance with section 4.5 of Schedule 1 of PIPEDA, you must also delete my stored personal information if it is no longer required for any other legal purposes.
+
+In general, PIPEDA requires organizations to provide individuals with access to their personal information at free or minimal cost within 30 days. For details about organizations' responsibilities under PIPEDA's access provision see the Office of the Privacy Commissioner's guidance at priv.gc.ca: What businesses need to know.
+
+If you do not normally handle these types of requests, please forward this letter to the person in your organization responsible for privacy compliance.
+
+Please contact me at [YOUR EMAIL HERE] if you require additional information from me before you proceed.
