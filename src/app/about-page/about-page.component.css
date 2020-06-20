@@ -18,3 +18,11 @@ p {
   margin-top: 5px;
   margin-bottom: 10px;
 }
+a {
+  text-decoration: none;
+  color: black;
+}
+a:hover {
+  color: rgb(52, 214, 255);
+  cursor: pointer;
+}

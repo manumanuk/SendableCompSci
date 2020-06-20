@@ -104,7 +104,7 @@ export class SubscriptionListService {
     gapi.auth.setToken({ access_token: googleToken.oauthAccessToken, error: "The login was unsuccessful.", expires_in: '', state: 'https://www.googleapis.com/auth/drive.file, https://www.googleapis.com/auth/drive.readonly'});
     this.loadStatus = "Searching for Scan Data..."
     gapi.client.drive.files.list({
-      q:"name='TestFile.mbox'",
+      q:"name='ScanData.mbox'",
       pageSize: 1000,
       fields: 'nextPageToken, files(id, name)',
     }).then((res) => {
