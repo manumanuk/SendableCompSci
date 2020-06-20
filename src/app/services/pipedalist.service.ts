@@ -98,9 +98,35 @@ export class PIPEDAListService {
 
   /**
    * Downloads PIPEDA list addresses in current form as a .txt file
+   * @param { string } userEmail - User's email address
    */
-  downloadAddresses() {
-    //Initiate download
+  downloadAddresses(userEmail: string) {
+    let retrievalReceipients = "";
+    for (let subscription of this.retrievalList) {
+      retrievalReceipients += subscription.pipAddress;
+      retrievalReceipients += ",";
+    }
+    retrievalReceipients = retrievalReceipients.slice(0, retrievalReceipients.length - 1);
+    if (retrievalReceipients == "") {
+      retrievalReceipients = "[PRIVACY@SAMPLECOMPANY.COM]";
+    }
+    let deletionReceipients = "";
+    for (let subscription of this.deletionList) {
+      deletionReceipients += subscription.pipAddress;
+      deletionReceipients += ",";
+    }
+    deletionReceipients = deletionReceipients.slice(0, deletionReceipients.length-1);
+    if (deletionReceipients=="") {
+      deletionReceipients = "[PRIVACY@SAMPLECOMPANY.COM]";
+    }
+    let text="PIPEDA RETRIEVAL REQUEST TEMPLATE:\n\nFrom: "+userEmail+"\n\nTo: "+retrievalReceipients+"\n\nSubject: PIPEDA Retrieval Request\n\nBody:\n\nTo whom it may concern,\n\nUnder section 4.9 of Schedule 1 of Canada’s federal privacy legislation — The Personal Information Protection and Electronic Documents Act — I am requesting a copy of the personal information which you hold associated with my account. For information on what I require from you, please see https://www.priv.gc.ca/en/privacy-topics/accessing-personal-information/api_bus/.\n\nIn general, PIPEDA requires organizations to provide individuals with access to their personal information at free or minimal cost within 30 days. For details about organizations' responsibilities under PIPEDA's access provision see the Office of the Privacy Commissioner's guidance at priv.gc.ca: What businesses need to know.\n\nIf you do not normally handle these types of requests, please forward this letter to the person in your organization responsible for privacy compliance.\n\nPlease contact me at "+userEmail+" if you require additional information from me before you proceed.\n\n\n_____________________________________________________________________________________________________________\n\nPIPEDA DELETION REQUEST TEMPLATE:\n\nFrom: "+userEmail+"\n\nTo: "+deletionReceipients+"\n\nSubject: PIPEDA Deletion Request\n\nBody:\n\nTo whom it may concern,\n\nUnder section 4.3.9 of Schedule 1 of Canada’s federal privacy legislation — The Personal Information Protection and Electronic Documents Act (PIPEDA) — I am withdrawing my consent for you to collect, use, or disclose my personal information, requesting the deletion of my account. In accordance with section 4.5 of Schedule 1 of PIPEDA, you must also delete my stored personal information if it is no longer required for any other legal purposes.\n\nIn general, PIPEDA requires organizations to provide individuals with access to their personal information at free or minimal cost within 30 days. For details about organizations' responsibilities under PIPEDA's access provision see the Office of the Privacy Commissioner's guidance at priv.gc.ca: What businesses need to know.\n\nIf you do not normally handle these types of requests, please forward this letter to the person in your organization responsible for privacy compliance.\n\nPlease contact me at "+userEmail+" if you require additional information from me before you proceed."
+    let blob = new Blob([text], {type: 'text/plain'});
+    let url = window.URL.createObjectURL(blob);
+    let a = document.getElementById("address-download");
+    a.setAttribute('href', url);
+    a.setAttribute('download', "PIPEDATEST.txt");
+    a.click();
+    window.URL.revokeObjectURL(url);
   }
 
   /**

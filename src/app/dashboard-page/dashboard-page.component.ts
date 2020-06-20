@@ -77,7 +77,7 @@ export class DashboardPageComponent implements OnInit {
    * Downloads a text file of PIPEDA addresses
    */
   downloadAddresses() {
-    this._PIPEDAList.downloadAddresses();
+    this._PIPEDAList.downloadAddresses(this._login.getUserData().email);
   }
 
   /**

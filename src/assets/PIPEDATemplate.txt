@@ -25,7 +25,7 @@ PIPEDA DELETION REQUEST TEMPLATE:
 From: [YOUR EMAIL HERE]
 To: [PRIVACY@SAMPLECOMPANY.COM]
 
-Subject: PIPEDA Retrieval Request
+Subject: PIPEDA Deletion Request
 
 Body:
 To whom it may concern,

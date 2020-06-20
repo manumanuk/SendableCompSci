@@ -50,15 +50,20 @@ export class SubscriptionService {
    * @param { string } url - Url of company website
    */
   private async crawlWeb(name: string, url: string) {
-    let response = await this._http.post<Array<SubscriptionData>>("http://localhost:5001/sendablecompsci/us-central1/scraper", JSON.stringify({ text: "https://" + url }))
-    .toPromise<Array<SubscriptionData>>().catch(rej => {
-      console.log(rej);
-      this.subscriptionData = new SubscriptionData();
-      this.subscriptionData.name = name;
-      this.subscriptionData.url = url;
-      //this.databaseRef.push(this.subscriptionData);
-      return;
-    });
+    let response = await this._http
+      .post<Array<SubscriptionData>>(
+        "https://us-central1-sendablecompsci.cloudfunctions.net/scraper",
+        JSON.stringify({ text: "https://" + url })
+      )
+      .toPromise<Array<SubscriptionData>>()
+      .catch((rej) => {
+        console.log(rej);
+        this.subscriptionData = new SubscriptionData();
+        this.subscriptionData.name = name;
+        this.subscriptionData.url = url;
+        //this.databaseRef.push(this.subscriptionData);
+        return;
+      });
     if (response != null) {
       let data = response[0];
       if (data.logoSrc == null) {
