@@ -65,8 +65,9 @@ export class DashboardPageComponent implements OnInit {
   }
 
   /**
-   * Initiates a mailto request using pipedalist object
+   * Returns a mailto string
    * @param { string } type - "deletion" or "retrieval" type
+   * @returns { string } mailto href text
    */
   sendMailTo(type: string) {
     return this._PIPEDAList.send(type, this._login.getUserData().email);

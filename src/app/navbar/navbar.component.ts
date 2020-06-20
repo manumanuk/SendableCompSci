@@ -48,7 +48,7 @@ export class NavbarComponent implements OnInit {
 
   /**
    * Calls getter method from backend LoginService object to receive user data
-   * @returns { Object } Returns an object which includes name, profile picture, and email data for user
+   * @returns { firebase.User } Returns an object which includes name, profile picture, and email data for user
    */
   getData() {
     return this._loginService.getUserData();

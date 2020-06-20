@@ -33,6 +33,7 @@ export class LoginPageComponent implements OnInit {
 
   /**
    * Retrieves login status
+   * @returns { boolean } True if logged in, false if user is not logged in
    */
   getLoginStatus() {
     return this._loginService.isLoggedIn();

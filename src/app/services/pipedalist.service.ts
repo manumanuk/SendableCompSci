@@ -77,10 +77,10 @@ export class PIPEDAListService {
   /**
    * Sends PIPEDA requests using mailto:
    * @param { string } type - Type of mailto to initiate ("deletion" or "retrieval")
-   * @param { string } email - User's email address
+   * @param { string } userEmail - User's email address
    * @returns { string } - mailto href text
    */
-  send(type: string, userEmail) {
+  send(type: string, userEmail: string) {
     let recipients = "";
     if (type=="retrieval") {
       for (let subscription of this.retrievalList) {
