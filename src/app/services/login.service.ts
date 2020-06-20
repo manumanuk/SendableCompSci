@@ -86,6 +86,7 @@ export class LoginService {
     }
     return status;
   }
+
   /**
    * Creates an Object to hold user's name, email, and profile picture
    * @returns { firebase.User } - Returns user's biographical information
@@ -96,7 +97,7 @@ export class LoginService {
 
   /**
    * Retrieves important credential data, like access token and refresh token
-   * @returns { CredentialData } - credentialData: Credential data associated with Firebase login
+   * @returns { CredentialData } - Credential data associated with Firebase login
    */
   getCredentials() {
     this.refreshCredentials().then((res) => {
@@ -107,7 +108,7 @@ export class LoginService {
 
   /**
    * Refresh the Firebase login access token
-   * @returns { Promise<firebase.auth.UserCredential> } -  Provides a Promise containing access token
+   * @returns { Promise<firebase.auth.UserCredential> } - Provides a Promise containing access token
    */
   refreshCredentials(): Promise<firebase.auth.UserCredential> {
     if (this.credentialData.credential==null){
@@ -116,12 +117,10 @@ export class LoginService {
       return this.userDetails.reauthenticateWithCredential(this.credentialData.credential);
     }
   }
-   /* return this.userDetails.reauthenticateWithCredential(this.credentialData.credential);
-  }*/
 
   /**
- * Initiates Google Auth Service to access Google Drive API
- */
+   * Initiates Google Auth Service to access Google Drive API
+   */
   initGoogleClient() {
     return new Promise((resolve, reject) => {
       gapi.load("client:auth2", () => {

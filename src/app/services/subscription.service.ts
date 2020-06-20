@@ -114,6 +114,10 @@ export class SubscriptionService {
       await this.crawlWeb(name, url);
     }
   }
+
+  /**
+   * Refreshes the HTML view of the dashboard by adding then deleting a test data SubscriptionData to the firebase database
+   */
   finalUpdate() {
     let testData = new SubscriptionData();
     testData.name = "update";

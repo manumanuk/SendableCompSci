@@ -7,7 +7,7 @@
         <div class="dashboard-container" style="width: 660px; height: 290px; padding: 20px;">
           <h1 class="header-text" style="padding: 50px 0px">Upload your email data to get started.</h1>
           <button class="dash-button brown-button" (click)="uploadData()">Begin Scanning</button>
-          <p class="instructions" id="aboutLink" routerLink="/about">Find out how.</p>
+          <p class="instructions" id="aboutLink" routerLink="/about#instructions">Find out how.</p>
         </div>
 
         <div>
@@ -16,7 +16,7 @@
 
         <div class="dashboard-container" style="width: 660px; height: 130px;">
           <h1 class="header-text" style="width: 410px; padding: 25px 0px; display: inline-block;">Download the PIPEDA request template.</h1>
-          <a href="../../assets/PIPEDATemplate.txt" download="PIPEDATemplate.txt"><button class="dash-button brown-button" style="display: inline-block; margin: 25px; position: relative; bottom: 20px;" (click)="downloadPIPEDATemplate()">Download</button></a>
+          <a href="../../assets/PIPEDATemplate.txt" download="PIPEDATemplate.txt"><button class="dash-button brown-button" style="display: inline-block; margin: 25px; position: relative; bottom: 20px;">Download</button></a>
 
         </div>
       </div>
@@ -28,7 +28,7 @@
 
         <div id="sublist-header">
           <h1 class="header-text" style="text-align: center; font-size: 34px; padding: 10px; display: inline-block;">Select from the following to send PIPEDA requests.</h1>
-          <button id="sort-button"><p style="font-weight: 100; font-family: Raleway; font-size: 30px; display: inline;">Most Spam</p><img src="../../assets/images/sort-arrow.png" style="display: inline-block; height: 20px; padding-left: 10px;"></button>
+          <button id="sort-button" (click)="reorderSubList()"><p style="font-weight: 100; font-family: Raleway; font-size: 30px; display: inline;">Most Spam</p><img src="../../assets/images/sort-arrow.png" [ngStyle]="{'transform': (getSortState() == 0 || getSortState() == 1 ? 'none' : 'scaleY(-1)')}"style="display: inline-block; height: 20px; padding-left: 10px;"></button>
         </div>
 
         <div id="sublist-options">
@@ -83,7 +83,7 @@
                 <h1 class="header-text" style="display: inline; font-size: 19px; margin: 0px 10px; bottom: 55px; position:relative;">
                     Delete Account
                 </h1>
-                <button class="brown-button dash-button" id="list-delete-button">Delete Account</button>
+                <a target="_blank" [href]="subscription.deleteAccountURL"><button class="brown-button dash-button" id="list-delete-button">Delete Account</button></a>
               </div>
 
               <div *ngIf="(subscription.deleteAccountURL=='' && subscription.pipAddress=='')" style="display:inline-block;">

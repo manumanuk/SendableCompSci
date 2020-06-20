@@ -22,6 +22,12 @@ export class PIPEDAListService {
    */
   constructor() {}
 
+  /**
+   * Provides the body portion of the mailto: email
+   * @param { string } email - User's email address
+   * @param { string } type  - Type of request being initiated ("retrieval" or "deletion")
+   * @returns { string } - Returns the email body depending on type of request
+   */
   createEmailBody (email:string, type: string) {
     if (type=="retrieval") {
       return "To%20whom%20it%20may%20concern,%0D%0A%0D%0A" +
@@ -46,7 +52,7 @@ export class PIPEDAListService {
   }
 
   /**
-   *
+   * Adds/removes/changes the retrieval/deletion state a given subscription to the PIPEDA list
    * @param { SubscriptionData } subscription - the subscription being added to the PIPEDA list
    * @param { string } type - the type of request to be sent (retrieval or deletion)
    */
@@ -72,6 +78,7 @@ export class PIPEDAListService {
    * Sends PIPEDA requests using mailto:
    * @param { string } type - Type of mailto to initiate ("deletion" or "retrieval")
    * @param { string } email - User's email address
+   * @returns { string } - mailto href text
    */
   send(type: string, userEmail) {
     let recipients = "";
@@ -88,6 +95,7 @@ export class PIPEDAListService {
     }
     return "mailto:" + userEmail + "?bcc=" + recipients.slice(0, recipients.length - 1).trim() + "&subject=" + "PIPEDA%20" + type[0].toUpperCase() + type.slice(1) + "%20Request" + "&body=" + this.createEmailBody(userEmail, type) +"%0D%0A%0D%0A"+ footnote;
   }
+
   /**
    * Downloads PIPEDA list addresses in current form as a .txt file
    */

@@ -1,3 +1,122 @@
 <main>
-  <h1>About Us</h1>
+  <div>
+    <br>
+    <h1 class="title">About Sendable</h1>
+    <div style="width: 275px; border-bottom: 1px solid black; margin: 0 auto; margin-top: 20px;"></div>
+  </div>
+  <div style = "padding: 35px;">
+    <p>Stop for a moment and think about how many companies you're subscribed to with your email account. Dozens? Hundreds?
+      Each and every one of those companies holds some information about you. Perhaps your name, your home address,
+      your buying habits, your credit card info, images of you and your dog, etc.
+    </p>
+    <p>For most people, this idea alone is a cause for concern. How can you trust all of these sites to keep your
+      information safe? Why should they continue to have access to this information, even when it is no longer of use to you
+      in the context of the website? Indeed, after many high profile leaks associated with companies like Facebook in recent years,
+      it has become apparent that internet privacy is being increasingly threatened. However, with the arrival of new privacy
+      legislation in many countries, a solution to some of these problems has finally arrived.
+    </p>
+    <p>Welcome to Sendable, an automated PIPEDA Request generator.</p>
+    <h2>What in the world is PIPEDA?</h2>
+    <p>The Personal Information Protection and Electronic Documents Act (PIPEDA), is a federal Canadian privacy law
+      that applies to most private-sector organizations across Canada. With new admendments to the law that have been
+      passed in recent years, Canadian consumers now have more control over their data usage. Under Section 4 of Schedule 1
+      of PIPEDA, consumers are now able to request access to personal information that a company holds about them, or request
+      the deletion of that stored data altogether. To initiate the process, consumers simply have to provide companies with
+      a written mail or email request to the companies they wish to delete/retrieve their data from. Companies are generally
+      required by law to provide access to the information within 30 days for free or at a minimal cost.
+    </p>
+    <p>Read more about PIPEDA <a href="https://www.priv.gc.ca/en/privacy-topics/privacy-laws-in-canada/the-personal-information-protection-and-electronic-documents-act-pipeda/pipeda_brief/" target="_blank">here</a>.</p>
+    <h2>So What's Sendable?</h2>
+    <p>Okay, so now that you understand how PIPEDA requests work, imagine having to search through your email archives for hours to
+      remind yourself of the obscure companies that you are subscribed to. Then imagine having to search the web for a company's
+      privacy/support email, drafting an email in legal language, and repeating that process for every single company in your mailbox.
+    </p>
+    <p>
+      Sendable is here to simplify things for you. With our automated email scanner, you can gain access to a list of all companies that you've
+      ever subscribed to, and, with a few simple clicks, draft a PIPEDA Request email BCC'd to all of those companies, so all you have to do is hit
+      send. Or, if you would like, you can download PIPEDA request email templates to send the email yourself.
+    </p>
+    <h2 id="instructions">How Does Sendable Work?</h2>
+    <p>
+      To begin the Sendable scan process, you must upload your email data to a Google Drive account. To protect your privacy, Sendable does not require
+      uploads or storage of your data. Once you have uploaded an email ".mbox" file to Google Drive, you can simply log in to Sendable with your Google
+      credentials, and Sendable will (after requesting for permission to access your Drive) search for a file named "ScanData.MBOX". Once the file has been
+      located, Sendable uses the Google Drive API to read the file contents, and uses a keyword search to look for company subscriptions in your email data.
+      After collecting a list of companies associated with your account, our web scraping tool searches the web for company logos, privacy/support email accounts.
+      Once the scraper has collected all the data it can, it begins loading a list of companies that you are subscribed to.
+    </p>
+    <h2 id="instructions">How Do I Get Started?</h2>
+    <p>
+      To begin, navigate to the <a href="https://takeout.google.com/">Google Takeout</a> website to retrieve your email data. In order to get just your
+      email information, click deselect all, and scroll to the "Mail" option, and select which folders you would like to retrieve.
+    </p>
+    <p><strong>
+      Note:
+      it is recommended to use a folder relevant to company subscriptions such as the in-built "Category Promotions". Using
+      all email data can cause the
+      data retrieval process to be very slow due to Google Drive API limitations, and large files may not load.
+    </strong></p>
+    <p>
+      Next, select your favourite export delivery method and click the "Export Once" option. Wait for your email data to be delivered in the MBOX format.
+      It could take a few minutes, several hours, or days to arrive depending on how much data has been exported. Once you have exported your emails, download
+      the zip folder you receive and unzip using a tool like Winrar. Rename the MBOX file “ScanData.mbox” and upload it to your Google Drive account.
+      Once this step is complete, log in with your Google account credentials and press the "Begin Scan" button. Note that it may take up to a few minutes to
+      finish this process as it takes the Google Drive API time to extract data from large email data files. Once your scan has completed, the dashboard page
+      will display a list of companies that you are subscribed to. For
+      companies whose information the web crawler was able to retrieve, you will see the name of the company, the company’s
+      logo, the number of times the company has emailed you, an option to either send a retrieval or deletion PIPEDA request,
+      and a link where you can delete your account, if applicable. If any of these are missing, you may see a message
+      indicating that the scan was not able to find the information, and you may see a question mark icon substituted for the
+      company’s logo. You can organize your subscriptions in terms of most spam/least spam using the button at the top of the
+      menu.
+    </p>
+    <h3 style="font-family: Raleway; font-style: normal; font-weight: 300; text-decoration: underline;">Sending PIPEDA Requests</h3>
+    <p>
+      Sendable’s automatic email sender makes it easy to send PIPEDA requests to your subscribed companies. Simply click
+      either “Retrieve” or “Delete” underneath a company’s PIPEDA options, and press “Draft Deletion Email” and/or “Draft
+      Retrieval Email”. You will be redirected to a draft mail which will have the subject line, receivers, and email
+      body auto-filled. Simply click send, or update any details in the email as you wish. It may take up to 30 days for a
+      company to get back to you on their PIPEDA process, and they could require more information from you before they proceed.
+    </p>
+    <p>
+      <strong>
+        Note: It is important that you check the BCC'd email accounts that have been auto-filled. Sendable is currently a
+        beta site and the web scraper may sometimes discover email accounts that are not company support emails. If you
+        accidentally send
+        an email to the wrong department, it may end up in the trash! Sendable is not responsible for any incorrectly
+        addressed mail.
+      </strong>
+    </p>
+    <p>For some companies, a support email may not be provided, but there may be an option to delete your account information
+    instead. If this information is successfully found by the web crawler, a button named “Delete Account” will appear under
+    the subscription options. Clicking this button will redirect you to the company’s deletion policy website. Follow the
+    instructions provided by the company to delete/disable your account.</p>
+    <p>If you choose not to use our automatic sender button, you can also manually download the email addresses of all
+    companies you have been subscribed to. To do so, click “Download Selected Addresses”, and you will receive a text file
+    containing the email addresses of all companies which you have clicked either “Retrieve” or “Delete” on.
+    You may also wish to not use our email scanner altogether. Please note that we do not store any of the personal data
+    involved in your emails. If you wish to manually submit PIPEDA requests, you may download the email template from the
+    dashboard page, prior to clicking “Begin Scanning”.
+    </p>
+    <h2>What's In It For You?</h2>
+    <p>
+      Sendable is here to bring the world a step closer to true internet privacy and digital accountability. We will never share any of your information.
+      In fact, true to the core principles of PIPEDA, we store as minimal information about you as possible. See our privacy policy below for more info.
+    </p>
+    <h2>Privacy</h2>
+    <p>
+      Sendable is a service designed to make internet privacy simpler. Wouldn't it be ironic if we tried to jeopardize it? We understand that email data is
+      a very sensitive piece of information, that's why we've made sure we never store your email information on our servers. Using the Google Drive API, we are
+      able to remotely access your data and keep it safe where it can be trusted: in your hands. The only information we store about you is your email address. Additionally,
+      the companies that we discover in your inbox are used to build our database of companies that we've already searched for, so that future searches can be quicker and
+      we don't run into issues with scraping a single company's website multiple times per second.
+    </p>
+    <p>
+      Sendable is also open source, so you can fact-check all of the claims on this page by viewing our git repository <a href="https://github.com/manumanuk/SendableCompSci" target="_blank">here</a>.
+    </p>
+    <p>
+      Note: Sendable is not affliated with a registered company, nor is it currently a production-level application. We are not liable for any issues that may occur
+      during the scanning process or the PIPEDA request process.
+    </p>
+  </div>
 </main>

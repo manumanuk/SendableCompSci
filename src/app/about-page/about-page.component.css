@@ -1,0 +1,20 @@
+.title {
+  font-family: Raleway;
+  font-size: 60px;
+  font-weight: 100;
+  text-align: center;
+  margin: 5px;
+}
+h2 {
+  font-family: Raleway;
+  font-size: 30px;
+  font-weight: 300;
+  text-align: left;
+  margin-bottom: 5px;
+  margin-top: 25px;
+}
+p {
+  font-weight: 200;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}

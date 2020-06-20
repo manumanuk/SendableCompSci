@@ -15,6 +15,11 @@ import { SubscriptionData } from '../services/prototypes/subscription-data-inter
  * @implements { OnInit }
  */
 export class DashboardPageComponent implements OnInit {
+
+  public pressed = false;
+  public buttonColor = this.pressed ? "#1db5a3" : "#f3f3f3";
+  public textColor = this.pressed ? "white" : "black";
+
   /**
    * Creates Subscription List and PIPEDA List class instances
    * @constructor
@@ -22,12 +27,11 @@ export class DashboardPageComponent implements OnInit {
    * @param { PIPEDAListService } _PIPEDAList - Creates object to hold list of companies for PIPEDA
    * @param { LoginService } _login - Handles authorization events
    */
-  constructor(private _subscriptionList: SubscriptionListService, private _PIPEDAList: PIPEDAListService, private _login: LoginService) {}
-
-  public pressed = false;
-
-  public buttonColor = this.pressed ? '#1db5a3' : '#f3f3f3';
-  public textColor = this.pressed ? 'white' : 'black';
+  constructor(
+    private _subscriptionList: SubscriptionListService,
+    private _PIPEDAList: PIPEDAListService,
+    private _login: LoginService
+  ) {}
 
   /**
    * Loads google client for Google Drive API
@@ -53,11 +57,11 @@ export class DashboardPageComponent implements OnInit {
 
   /**
    * Adds a given subscription to the list of PIPEDA requests
-   * @param { string } name - Name of the particular subscription on sublist
+   * @param { SubscriptionData } subscription - The subscription to be added to the PIPEDA list
    * @param { string } type - Is this a retrieval or deletion request?
    */
   addToPIPEDAList(subscription: SubscriptionData, type: string) {
-    this._PIPEDAList.add(subscription, type)
+    this._PIPEDAList.add(subscription, type);
   }
 
   /**
@@ -66,13 +70,6 @@ export class DashboardPageComponent implements OnInit {
    */
   sendMailTo(type: string) {
     return this._PIPEDAList.send(type, this._login.getUserData().email);
-  }
-
-  /**
-   * Downloads PIPEDA template
-   */
-  downloadPIPEDATemplate() {
-    this._subscriptionList.downloadTemplate();
   }
 
   /**
@@ -91,61 +88,92 @@ export class DashboardPageComponent implements OnInit {
   }
 
   /**
+   * Returns a number corresponding to the sorted/not sorted state of the SubscriptionData
+   * @returns { number } - 0 for unsorted, 1 for sorted by descending order of email frequency, -1 for ascending order
+   */
+  getSortState() {
+    return this._subscriptionList.sortState;
+  }
+
+  /**
    * Takes in a word and resizes it to fit inside the subscription box in the DOM
    * @param { string } word - Word to resize
    * @returns { Array<string> } - Two element array: element 1: size of word in pixels, element 2: distance from bottom of subscription box in px
    */
   textResize(word: string) {
     if (word == null) {
-      return ['1px', '1px'];
+      return ["1px", "1px"];
     }
-    let stringArray = word.split('');
-    let shortLetters = stringArray.filter(letter => {
+    let stringArray = word.split("");
+    let shortLetters = stringArray.filter((letter) => {
       letter = letter.toLowerCase();
-      if (letter === 'i' || letter === 'f' || letter === 'j' || letter === 'l' || letter === 'r' || letter === 't' || letter === ' ') {
+      if (
+        letter === "i" ||
+        letter === "f" ||
+        letter === "j" ||
+        letter === "l" ||
+        letter === "r" ||
+        letter === "t" ||
+        letter === " "
+      ) {
         return letter;
       }
     }).length;
-    let longLetters = stringArray.filter(letter => {
+    let longLetters = stringArray.filter((letter) => {
       letter = letter.toLowerCase();
-      if (letter === 'm' || letter === 'w') {
+      if (letter === "m" || letter === "w") {
         return letter;
       }
     }).length;
-    let stringSize = word.length + longLetters - shortLetters*0.5;
+    let stringSize = word.length + longLetters - shortLetters * 0.5;
     let fontSize = (400 / stringSize) * 1.7;
-    if (fontSize > 80)
-      fontSize = 80;
-    return [fontSize + 'px', 20+(80-fontSize)*0.3 + 'px'];
+    if (fontSize > 80) fontSize = 80;
+    return [fontSize + "px", 20 + (80 - fontSize) * 0.3 + "px"];
   }
 
+  /**
+   * Changes HTML view based on the selected PIPEDA option of a given subscription (Retrieval/Deletion type)
+   * @param { SubscriptionData } subscription - a subscription that has PIPEDA options available
+   * @returns { Object } - Returns an object containing information about how to format HTML based on PIPEDA state of a subscription
+   */
   getPIPEDAState(subscription: SubscriptionData) {
     let state = this._PIPEDAList.subState(subscription);
     if (state == "retrieval") {
       return {
         retrievalBox: "☑",
         deletionBox: "☐",
-        retrievalColorBGC: ['#1db5a3', 'white'],
-        deletionColorBGC: ['#f3f3f3', 'black']
-      }
+        retrievalColorBGC: ["#1db5a3", "white"],
+        deletionColorBGC: ["#f3f3f3", "black"],
+      };
     } else if (state == "deletion") {
       return {
         retrievalBox: "☐",
         deletionBox: "☑",
-        retrievalColorBGC: ['#f3f3f3', 'black'],
-        deletionColorBGC: ['#1db5a3', 'white']
-      }
+        retrievalColorBGC: ["#f3f3f3", "black"],
+        deletionColorBGC: ["#1db5a3", "white"],
+      };
     } else {
       return {
         retrievalBox: "☐",
         deletionBox: "☐",
-        retrievalColorBGC: ['#f3f3f3', 'black'],
-        deletionColorBGC: ['#f3f3f3', 'black']
-      }
+        retrievalColorBGC: ["#f3f3f3", "black"],
+        deletionColorBGC: ["#f3f3f3", "black"],
+      };
     }
   }
 
+  /**
+   * Returns the state of the scan as a string
+   * @returns { string } - A descriptive loading screen message
+   */
   getLoadingScreenText() {
     return this._subscriptionList.getLoadState();
+  }
+
+  /**
+   * Toggles between ascending/descending order (based on email frequency) for the subscription list
+   */
+  reorderSubList() {
+    this._subscriptionList.reorder();
   }
 }

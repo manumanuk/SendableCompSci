@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SubscriptionService } from './subscription.service';
 import { CredentialData } from './prototypes/credential-prototype'
-import { PIPEDAListService } from './pipedalist.service';
 import { SubscriptionData } from './prototypes/subscription-data-interface'
 import { bubbleSort, selectionSort, linearSearch, binarySearch } from './prototypes/sorting-searching-algorithms'
 
@@ -17,6 +16,7 @@ import { bubbleSort, selectionSort, linearSearch, binarySearch } from './prototy
 export class SubscriptionListService {
   private dataSrc: string = null; // Google Drive API will provide a way to access email zip file, for now treated as a url
   private subscriptions:{[name:string]:SubscriptionData} = { }; //Array of SubscriptionData Objects attached to names
+  private sortedSubArray: Array<SubscriptionData> = [];
   private emailData: string = null;
   private emailPack: Array<string> = [];
   private avoidAddresses: Array<String> = [
@@ -33,6 +33,7 @@ export class SubscriptionListService {
     "peelsb.com"
   ];
   private loadStatus: string = "Loading...";
+  public sortState = 0;
 
   /**
    * Creates Subscripton List class
@@ -119,6 +120,9 @@ export class SubscriptionListService {
     });
   }
 
+  /**
+   * Returns loading screen text to show to the user during the scanning process
+   */
   getLoadState () {
     return this.loadStatus;
   }
@@ -151,9 +155,9 @@ export class SubscriptionListService {
 
 
   /**
-    * Checks if data resource has been uploaded
-    * @returns { boolean } - Returns true if data source has been uploaded, else returns false
-  */
+   * Checks if data resource has been uploaded
+   * @returns { boolean } - Returns true if data source has been uploaded, else returns false
+   */
   isDataUploaded() {
     let status: boolean;
     //Call external function to check whether an upload has occured
@@ -213,17 +217,21 @@ export class SubscriptionListService {
         }
       }
     }
-
     this._newSub.finalUpdate();
+
 
   }
 
   /**
    * Prints out list of subscriptions to console
-   * @returns { Array<SubscriptionData> } - returns an array of all subscriptions
+   * @returns { Array<SubscriptionData> } - returns an array of all subscriptions, either ordered or unordered
    */
   printSubscriptionData() {
-    return Object.values(this.subscriptions);
+    if (this.sortState == 0 || this.sortedSubArray == null) {
+      return Object.values(this.subscriptions);
+    } else {
+      return this.sortedSubArray;
+    }
   }
 
   /**
@@ -273,14 +281,31 @@ export class SubscriptionListService {
   }
 
   /**
-   * Downloads PIPEDA email template to user desktop
+   * Reorders the subscription list into ascending/descending order based on email frequency in a toggle manner
    */
-  async downloadTemplate() {
-    //Initiate download
-    /*await this._newSub.searchForCompany("snapchat", "snapchat.com");
-    await this._newSub.searchForCompany("tiktok", "tiktok.com");
-    await this._newSub.searchForCompany("facebook", "facebook.com");
-    await this._newSub.searchForCompany("twitter", "twitter.com");*/
+  reorder() {
+    if (this.sortState == 0) {
+      let temp: Array<[SubscriptionData, number]> = [];
+      for (let subscription of Object.values(this.subscriptions)) {
+        temp.push([subscription, subscription.emailFrequency]);
+      }
+      temp.sort((a, b) => {
+        return b[1] - a[1];
+      });
+      this.sortState = 1;
+      for (let value of temp) {
+        this.sortedSubArray.push(value[0]);
+      }
+    } else if (this.sortState==-1) {
+      this.sortedSubArray.reverse();
+      this.sortState = 1;
+    } else {
+      this.sortedSubArray.reverse();
+      this.sortState = -1;
+    }
+    this._newSub.finalUpdate();
+    console.log(this.sortedSubArray);
+    console.log(this.sortState);
   }
 }
 
