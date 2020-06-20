@@ -1,5 +1,11 @@
 # SendableCompSci - ICS4U0
 
+## Demo Site
+This project is deployed at https://sendablecompsci.firebaseapp.com and https://sendablecompsci.web.app.
+
+## Documentation
+All documentation associated with this project is available [here](./docs).
+
 ## Sorting and Searching
 Code associated with the ICS 4U0 Sorting and Searching assignment can be found in the files [subscription-list.service.ts](./src/app/services/subscription-list.service.ts/) (implementation of sorting and searching algorithms), and [sorting-searching-algorithms.ts](./src/app/services/prototypes/sorting-searching-algorithms.ts/) (algorithm function definitions, computational analysis and YouTube video answers).
 
