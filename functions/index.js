@@ -35,7 +35,9 @@ function interpretLink(link, homeSite) {
 
 /**
  * Given an HTML page url, find potential email links and "delete account" pages
- * @param {  } $ - URL of page to search for
+ * @param { url } - url to search for
+ * @param { text } - name of site being analyzed
+ * @param { homeSite } - url for homepage of site being analyzed
  */
 async function analyzePage(url, text, homeSite) {
   const res = await timeout(1000, fetch(url)).catch(e => {
