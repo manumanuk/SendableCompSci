@@ -1,44 +1,10 @@
-# SendableCompSci - ICS4U0
+# SendableCS
 
-## Demo Site
-This project is deployed at https://sendablecompsci.firebaseapp.com and https://sendablecompsci.web.app.
+Sendable is a web app created with Angular, Firebase Tools (Authentication, Cloud Functions, Realtime DB) and the Google Drive API. It scans a user's email data (once uploaded to their Google Drive) and produces a list of companies that the user is subscribed with. In addition, it uses a Cloud Function custom web scraper to find privacy-handling emails of each of those companies, and includes an option in the subscription list to draft a PIPEDA request email in legal language for the user. Once a specific company's data has been searched, the algorithm saves data about that company to a central database, to prevent multiple webscrapes to the same site.
 
-## Documentation
-Documentation including the UML Case Diagram, UML Class Diagram, User Manual, Flowchart and Screenshots is available [here](./docs)
+PIPEDA requests are written statements sent to companies by consumers that allows for the retrieval or deletion of an individual's personal data from company databases. Sendable automates this process to make privacy more accessible to all.
 
-## Extending Objects
-Code associated with the ICS 4U0 Extending Objects assignment can be found in the files [login.service.ts](./src/app/services/login.service.ts/) (super class LoginService) and [login-page.component.ts](./src/app/login-page/login-page.component.ts) (sub class LoginPageComponent), uses Inheritance.
+View a video demo of Sendable [here](https://www.youtube.com/watch?v=EvVwd-5UGgg).
 
-## Sorting and Searching
-Code associated with the ICS 4U0 Sorting and Searching assignment can be found in the files [subscription-list.service.ts](./src/app/services/subscription-list.service.ts/) (implementation of sorting and searching algorithms), and [sorting-searching-algorithms.ts](./src/app/services/prototypes/sorting-searching-algorithms.ts/) (algorithm function definitions, computational analysis and YouTube video answers).
-
-## Files
-Code associated with the ICS 4U0 Files assignment can be found in the files [subscription-list.service.ts](./src/app/services/subscription-list.service.ts/) (Google Drive API input), and [subscription.service.ts](./src/app/services/subscription.service.ts/) (database input and output -> currently commented out).
-
-
-# Angular
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.0.7.
-
-## Development server
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+![Dashboard](./readme_assets/sendable-dashboard.jpg)
+![Home Page](./readme_assets/sendable-homepage.jpg)
