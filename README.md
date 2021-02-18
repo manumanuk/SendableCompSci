@@ -4,7 +4,8 @@ Sendable is a web app created with Angular, Firebase Tools (Authentication, Clou
 
 PIPEDA requests are written statements sent to companies by consumers that allows for the retrieval or deletion of an individual's personal data from company databases. Sendable automates this process to make privacy more accessible to all.
 
-View a video demo of Sendable [here](https://www.youtube.com/watch?v=EvVwd-5UGgg).
+**View a video demo of Sendable [here](https://www.youtube.com/watch?v=EvVwd-5UGgg).**
+
 
 ![Dashboard](./readme_assets/sendable-dashboard.jpg)
 ![Home Page](./readme_assets/sendable-homepage.jpg)
